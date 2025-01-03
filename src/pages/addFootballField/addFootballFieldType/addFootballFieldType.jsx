@@ -64,6 +64,7 @@ const AddFootballFieldType = () => {
       );
     }
   };
+
   const handleFileChange1 = (e) => {
     const files = Array.from(e.target.files);
     setSelectedImageFile((img) => [...img, ...files]);
@@ -98,17 +99,6 @@ const AddFootballFieldType = () => {
   };
 
   const handleGetInfo = () => {
-    const data = {
-      location,
-      administrator,
-      administratorValue,
-      priceDay,
-      priceNight,
-      description,
-      selectedImages1,
-      mapLatLon,
-    };
-
     const formData = new FormData();
     let dataPUT = [];
     formData.append("football_f", id);
@@ -127,19 +117,23 @@ const AddFootballFieldType = () => {
   };
 
   useEffect(() => {
-    dispatch(getBranchById(id));
     dispatch(getAdvantages());
     dispatch(getConstructionType());
     dispatch(getFieldsTypeName());
-  }, [dispatch, id]);
+  }, [dispatch]);
 
   const newFoobolField = () => {
     setMapLatLon([]);
     setDescription("");
     setAdministratorValue("");
     setAdministrator("");
-    setPriceDay("");
-    setPriceNight("");
+    setPriceDay({ start_time: "", end_time: "", period_day: "day", price: 0 });
+    setPriceNight({
+      start_time: "",
+      end_time: "",
+      period_day: "evening",
+      price: 0,
+    });
     setConstructionListAcc([]);
     setSelectedImageFile([]);
     setSelectedImages1([]);
@@ -153,11 +147,11 @@ const AddFootballFieldType = () => {
   useEffect(() => {
     if (creacteFoobolStatus === "fulfilled") {
       newFoobolField();
-      dispatch(getBranchById(id));
       dispatch(getAdvantages());
       dispatch(getConstructionType());
+      console.log(creacteFoobolStatus);
     }
-  }, [creacteFoobolStatus, dispatch, id]);
+  }, [creacteFoobolStatus, dispatch]);
 
   if (creacteFoobolStatus === "loading") {
     return (
@@ -170,7 +164,7 @@ const AddFootballFieldType = () => {
   return (
     <div className="mx-[20px] mt-[90px] mb-7">
       <div>
-        {isModalMap && (
+        {isModalMap?.results && (
           <YandexMap
             setMapLatLon={setMapLatLon}
             mapLatLon={mapLatLon}

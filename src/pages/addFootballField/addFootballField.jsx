@@ -71,7 +71,7 @@ export default function AddFootballField() {
   const [advantagesList, setAdvantagesList] = useState([]);
   const [complex_type, setComplex_type] = useState();
 
-  const [administratorValue, setAdministratorValue] = useState();
+  const [administratorValue, setAdministratorValue] = useState("");
 
   const handlerPostCreacteFoobolField = () => {
     const errors = {};
@@ -413,6 +413,7 @@ export default function AddFootballField() {
                     administrators?.results?.map((res, i) => (
                       <Radio
                         key={i}
+                        id={res?.id}
                         name="radio-administrator"
                         title={`${res?.name} ${res?.surname}`}
                         value={`${res?.name} ${res?.surname}`}

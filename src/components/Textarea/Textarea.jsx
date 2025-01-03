@@ -1,10 +1,22 @@
-import React from 'react'
+import React from "react";
 
-export default function Textarea({value, onchange, label, placeholder, error }) {
+export default function Textarea({
+  value,
+  onchange,
+  label,
+  placeholder,
+  error,
+}) {
   return (
     <div className="flex flex-col gap-y-[8px]">
-      <p className="text-[14px] text-[#1C1C1C] font-normal leading-normal">{label}</p>
-      {error && <p className="text-red-500 text-[14px] font-normal leading-normal " >{error}</p>}
+      <p className="text-[14px] text-[#1C1C1C] font-normal leading-normal">
+        {label}
+      </p>
+      {error && (
+        <p className="text-red-500 text-[14px] font-normal leading-normal ">
+          {error}
+        </p>
+      )}
       <textarea
         onChange={(e) => {
           onchange(e.target.value);
@@ -17,5 +29,5 @@ export default function Textarea({value, onchange, label, placeholder, error }) 
         placeholder={placeholder}
       ></textarea>
     </div>
-  )
+  );
 }
