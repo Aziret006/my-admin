@@ -21,8 +21,8 @@ const Pe = ({ children }) => (
 );
 
 export default function AddFootballField() {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedIamgeFile, setSelectedImageFile] = useState(null);
+  const [selectedImage, setSelectedImage] = useState();
+  const [selectedIamgeFile, setSelectedImageFile] = useState();
   const navigate = useNavigate();
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
@@ -43,6 +43,7 @@ export default function AddFootballField() {
   } = useSelector((state) => state.createFoobol);
   const [newName, setNewName] = useState();
   const [locationsCitiesValue, setLocationsCitiesValue] = useState(null);
+  const [administratorValue, setAdministratorValue] = useState(null);
   const [address, setAddress] = useState(null);
   const [district, setDistrict] = useState(null);
   const [isModalMap, setIsModalMap] = useState(false);
@@ -67,11 +68,8 @@ export default function AddFootballField() {
   }, []);
 
   const [errorList, setErrorList] = useState([]);
-
   const [advantagesList, setAdvantagesList] = useState([]);
   const [complex_type, setComplex_type] = useState();
-
-  const [administratorValue, setAdministratorValue] = useState("");
 
   const handlerPostCreacteFoobolField = () => {
     const errors = {};
@@ -86,7 +84,7 @@ export default function AddFootballField() {
     const data = {
       name: newName,
       description: description,
-      administrator: 1,
+      administrator: 145,
       address: address,
       city: locationsCitiesValue,
       district: district,
@@ -95,9 +93,8 @@ export default function AddFootballField() {
       advantages: processedAdvantagesList,
       sport_complex_type: complex_type,
     };
-
     const formData = new FormData();
-    formData.append("name", data.name);
+    formData.append("name", newName || data.name);
     formData.append("description", data.description);
     formData.append("administrator", data.administrator);
     formData.append("address", data.address);
@@ -108,8 +105,10 @@ export default function AddFootballField() {
     ImageFile?.forEach((image, index) => {
       formData.append("back_ground_foto", image);
     });
-    selectedIamgeFile?.forEach((image, index) => {
-      formData.append("main_foto", image);
+    selectedIamgeFile?.forEach((image) => {
+      if (image && image.type.startsWith("image/")) {
+        formData.append("main_foto", image);
+      }
     });
     formData.append("sport_complex_type", data.sport_complex_type);
 
@@ -125,6 +124,8 @@ export default function AddFootballField() {
       setErrorList(errors);
       return;
     }
+    console.log("newName:", newName, "typeof:", typeof newName);
+    console.log("data.name:", data.name, "typeof:", typeof data.name);
 
     const newData = {
       data: processedAdvantagesList,
@@ -211,7 +212,7 @@ export default function AddFootballField() {
                           className="w-[22px] h-[22px] border-[1px] border-[#2222221A] rounded-[4px]"
                         />
                         <label className="text-[15px] leading-[17px] text-[#222222] font-normal">
-                          {res?.name}
+                          {res?.name || "Ошибка, обратитесь к администратору"}
                         </label>
                       </div>
                     </div>
@@ -245,9 +246,7 @@ export default function AddFootballField() {
                   <div className="flex flex-col gap-y-[10px] items-center">
                     <div
                       style={{
-                        backgroundImage: `url(${
-                          selectedImage != null ? selectedImage : img7
-                        })`,
+                        backgroundImage: `url(${selectedImage ?? img7})`,
                       }}
                       className="w-full h-[150px] bg-center bg-no-repeat bg-cover flex justify-center items-center  bg-gray-100 rounded shadow-md"
                     ></div>

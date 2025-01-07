@@ -43,6 +43,7 @@ const EditType = () => {
     period_day: "evening",
     price: 0,
   });
+  const [newName, setNewName] = useState(null);
   const [description, setDescription] = useState(null);
   const [administrator, setAdministrator] = useState(null);
   const [schedule, setSchedule] = useState(null);
@@ -50,7 +51,6 @@ const EditType = () => {
   const [selectedImages1, setSelectedImages1] = useState([]);
   const [selectedIamgeFile, setSelectedImageFile] = useState([]);
   const [constructionListAcc, setConstructionListAcc] = useState([]);
-  const [newName, setNewName] = useState(null);
 
   const handlerConstruction = (event) => {
     const newValue = event;
@@ -65,22 +65,26 @@ const EditType = () => {
 
   const handleFileChange1 = (e) => {
     const files = Array.from(e.target.files);
-    setSelectedImageFile((img) => [...img, ...files]);
-    const fileUrls = files?.map((file) => URL.createObjectURL(file));
-    setSelectedImages1((prevImages) => [...prevImages, ...fileUrls]);
+    setSelectedImageFile((img) => img.concat(files));
+    const fileUrls = files.map((file) => URL.createObjectURL(file));
+    setSelectedImages1((prevImages) => {
+      if (Array.isArray(prevImages)) {
+        return [...prevImages, ...fileUrls];
+      } else {
+        return fileUrls;
+      }
+    });
   };
 
   const handleAdvantages = (data, isChecked) => {
     const resId = data[1];
-    setAdvantagesList((prevList) => {
+    setAdvantagesList((prevList = []) => {
       if (isChecked) {
-        if (!prevList.some((item) => item.advantages === resId)) {
-          return [...prevList, { advantages: resId, description: "" }];
-        }
-        return prevList;
-      } else {
-        return prevList.filter((item) => item.advantages !== resId);
+        return prevList.some((item) => item.advantages === resId)
+          ? prevList
+          : [...prevList, { advantages: resId, description: "" }];
       }
+      return prevList.filter((item) => item.advantages !== resId);
     });
   };
 
@@ -165,7 +169,7 @@ const EditType = () => {
 
     const imageUrls = fieldsIdDetail?.gallery_f_type.map((item) => item.img);
     setSelectedImages1(imageUrls);
-    setConstructionListAcc(fieldsIdDetail?.construction_type);
+    // setConstructionListAcc(fieldsIdDetail?.construction_type);
   }, [fieldsIdDetail]);
 
   return (

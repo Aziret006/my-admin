@@ -92,7 +92,7 @@ export const getLocationsCities = createAsyncThunk(
 
 
 export const fetchAdministrators = createAsyncThunk(
-  "advantages/fetchAdministrator",
+  "administrators/fetchAdministrators",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${Api}admin_api/administrator/`, {
@@ -102,7 +102,7 @@ export const fetchAdministrators = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data || 'Ошибка при загрузке администраторов');
     }
   }
 );
@@ -181,7 +181,6 @@ export const patchAdvantages = createAsyncThunk(
           },
         }
       );
-
       dispatch(setIsUbdate(true));
       return response.data;
     } catch (error) {
@@ -421,15 +420,17 @@ export const advantagesSlice = createSlice({
 
       .addCase(fetchAdministrators.pending, (state) => {
         state.status = "loading";
+        state.error = null;
       })
       .addCase(fetchAdministrators.fulfilled, (state, action) => {
         state.status = "fulfilled";
         state.administrators = action.payload;
+        state.error = null;
       })
       .addCase(fetchAdministrators.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.payload;
-      })
+      });
   },
 });
 

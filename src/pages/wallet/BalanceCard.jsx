@@ -123,9 +123,7 @@ const BalanceCard = () => {
         {transaction.football_field_cost} сом
       </td>
       <td className="px-6 py-4 whitespace-nowrap">{transaction.created_by}</td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        {transaction.field_type}
-      </td>
+      <td className="px-6 py-4 whitespace-nowrap">{transaction.field_type}</td>
       <td className="px-6 py-4 whitespace-nowrap">
         <span className="flex items-center gap-x-[5px] px-2 py-1 rounded">
           <IoCalendarClearOutline />

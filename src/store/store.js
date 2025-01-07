@@ -14,6 +14,7 @@ import totalIncomeReducer from "./slice/total-income";
 import numberOfNewClientsReducer from "./slice/number-of-new-clients";
 import sortingReducer from "./slice/sorting-slice";
 import ratingReducer from './slice/ratingSlice'
+import walletBalanceReducer from "./slice/balans-slice";
 const store = configureStore({
   reducer: {
     user,
@@ -31,6 +32,7 @@ const store = configureStore({
     numberOfNewClients: numberOfNewClientsReducer,
     sorting: sortingReducer,
     rating: ratingReducer,
+    walletBalance: walletBalanceReducer,
   },
 });
 

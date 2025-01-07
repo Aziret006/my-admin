@@ -24,7 +24,7 @@ export default function Fields() {
 
   return (
     <>
-      {fieldDelete?.results && (
+      {fieldDelete && (
         <FieldsDelete
           setFieldDelete={setFieldDelete}
           deleteValue={deleteValue}

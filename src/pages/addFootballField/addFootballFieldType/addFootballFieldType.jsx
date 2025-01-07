@@ -67,9 +67,15 @@ const AddFootballFieldType = () => {
 
   const handleFileChange1 = (e) => {
     const files = Array.from(e.target.files);
-    setSelectedImageFile((img) => [...img, ...files]);
-    const fileUrls = files?.map((file) => URL.createObjectURL(file));
-    setSelectedImages1((prevImages) => [...prevImages, ...fileUrls]);
+    setSelectedImageFile((img) => img.concat(files));
+    const fileUrls = files.map((file) => URL.createObjectURL(file));
+    setSelectedImages1((prevImages) => {
+      if (Array.isArray(prevImages)) {
+        return [...prevImages, ...fileUrls];
+      } else {
+        return fileUrls;
+      }
+    });
   };
 
   const [newName, setNewName] = useState(null);
@@ -343,47 +349,51 @@ const AddFootballFieldType = () => {
               </h4>
             </div>
             <div className={"flex flex-col gap-[10px] p-[20px]"}>
-              {advantages?.map((res, i) => {
-                const isChecked = advantagesList.some(
-                  (item) => item.advantages === res.id
-                );
-                const currentItem =
-                  advantagesList.find((item) => item.advantages === res.id) ||
-                  {};
-                return (
-                  <div className={"flex gap-[5px] flex-col"} key={i}>
-                    <div className="flex gap-[5px] w-full flex-col">
-                      <div className="flex items-center gap-[10px] w-full">
-                        <input
-                          onChange={(e) => {
-                            const data = [e.target.name, res.id];
-                            handleAdvantages(data, e.target.checked);
-                          }}
-                          name={res.id}
-                          type="checkbox"
-                          className="w-[22px] h-[22px] border-[1px] border-[#2222221A] rounded-[4px]"
-                        />
-                        <label className="text-[15px] leading-[17px] text-[#222222] font-normal">
-                          {res?.name}
-                        </label>
-                      </div>
-                    </div>
-                    {isChecked && (
-                      <div className={"flex gap-[10px]"}>
-                        <input
-                          className="w-full text-[14px] leading-[17px] text-[#222222] font-normal outline-none border-b-[1px] border-[#1c1c1c1a] pb-[5px]"
-                          type="text"
-                          placeholder="Добавить описание"
-                          value={currentItem.description || ""}
-                          onChange={(e) =>
-                            updateDescription(res.id, e.target.value)
-                          }
-                        />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+             {advantages?.map((res, i) => {
+               if (res && res.id) {
+                 const isChecked = advantagesList.some(
+                   (item) => item.advantages === res.id
+                 );
+                 const currentItem =
+                   advantagesList.find((item) => item.advantages === res.id) ||
+                   {};
+                 return (
+                   <div className={"flex gap-[5px] flex-col"} key={i}>
+                     <div className="flex gap-[5px] w-full flex-col">
+                       <div className="flex items-center gap-[10px] w-full">
+                         <input
+                           onChange={(e) => {
+                             const data = [e.target.name, res.id];
+                             handleAdvantages(data, e.target.checked);
+                           }}
+                           name={res.id}
+                           type="checkbox"
+                           className="w-[22px] h-[22px] border-[1px] border-[#2222221A] rounded-[4px]"
+                         />
+                         <label className="text-[15px] leading-[17px] text-[#222222] font-normal">
+                           {res?.name}
+                         </label>
+                       </div>
+                     </div>
+                     {isChecked && (
+                       <div className={"flex gap-[10px]"}>
+                         <input
+                           className="w-full text-[14px] leading-[17px] text-[#222222] font-normal outline-none border-b-[1px] border-[#1c1c1c1a] pb-[5px]"
+                           type="text"
+                           placeholder="Добавить описание"
+                           value={currentItem.description || ""}
+                           onChange={(e) =>
+                             updateDescription(res.id, e.target.value)
+                           }
+                         />
+                       </div>
+                     )}
+                   </div>
+                 );
+               } else {
+                 return null;
+               }
+             })}
             </div>
           </div>
           <div className="grid gap-y-[20px] lg:gap-y-[40px] rounded-[10px]">

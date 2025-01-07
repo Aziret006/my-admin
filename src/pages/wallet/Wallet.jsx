@@ -12,6 +12,7 @@ import icon from "../../img/icon.svg";
 import image35 from "../../img/image 35.jpg";
 import image36 from "../../img/image 36.jpg";
 import image41 from "../../img/image 41.svg";
+import { fetchWalletBalance } from "../../store/slice/balans-slice.js";
 
 const schema = yup.object().shape({
   cardNumber: yup.string().when("selectedBank", {
@@ -53,6 +54,7 @@ const schema = yup.object().shape({
 
 export default function Wallet() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [selectedBank, setSelectedBank] = useState("Картой");
 
   const {
@@ -84,6 +86,14 @@ export default function Wallet() {
   const onSubmit = (data) => {
     toggleModal();
   };
+  const dispatch = useDispatch();
+
+  // Получаем состояние из Redux
+  const { data, loading, error } = useSelector((state) => state.walletBalance);
+
+  useEffect(() => {
+    dispatch(fetchWalletBalance()); // Запрос данных при монтировании компонента
+  }, [dispatch]);
 
   return (
     <>
@@ -98,7 +108,7 @@ export default function Wallet() {
                 У вас на балансе
               </p>
               <h1 className="mt-1 text-2xl font-medium text-left">
-                999 000 сом
+                {data?.balance} сом
               </h1>
             </div>
             <div className="absolute justify-end left-[270px] hidden sm:flex">
