@@ -1,6 +1,5 @@
-import React from 'react'
-import { InputMask } from '@react-input/mask';
-
+import React from "react";
+import { InputMask } from "@react-input/mask";
 
 export default function NewUser({ setPhone, setName }) {
   return (
@@ -26,9 +25,12 @@ export default function NewUser({ setPhone, setName }) {
           <InputMask
             onChange={(e) => setPhone(e.target.value)}
             className="w-full p-[8px] outline-none  bg-transparent "
-            placeholder="Номер телефона" mask="+996 (___) __-__-__" replacement={{ _: /\d/ }} />
+            placeholder="Номер телефона"
+            mask="+996 (___) __-__-__"
+            replacement={{ _: /\d/ }}
+          />
         </div>
       </div>
     </>
-  )
+  );
 }

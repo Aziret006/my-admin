@@ -59,7 +59,7 @@ export const createFoobolField = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${Api}admin_api/football_field_create/`,
+        `${Api}admin_api/football_field/`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -231,11 +231,14 @@ export const getFieldsTypeName = createAsyncThunk(
 
 export const postCreacteFieldType = createAsyncThunk(
   "advantages/postCreacteFieldType",
-  async (data, { rejectWithValue, dispatch }) => {
+  async (data, { rejectWithValue }) => {
     try {
+      const [formData, dataPUT] = data;
+      
+      // Первый запрос - создание поля
       const response = await axios.post(
         `${Api}admin_api/football-field-type/`,
-        data[0],
+        formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -244,19 +247,29 @@ export const postCreacteFieldType = createAsyncThunk(
         }
       );
 
-      const id = await response.data.id;
-      const advantages = await data[1];
-      const PATCHAdvantagesData = {
-        advantages,
-        id,
-      };
+      const id = response.data.id;
 
+      // Второй запрос с обновленными данными
+      const updateResponse = await axios.put(
+        `${Api}admin_api/football-field-type/${id}/`,
+        {
+          advantages: dataPUT.advantages,
+          schedule: dataPUT.schedule,
+          price: dataPUT.price,
+          construction_type: dataPUT.construction_type
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      dispatch(postCreacteFoobolField(PATCHAdvantagesData));
-
-      return response.data;
+      return updateResponse.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      console.error('Error details:', error.response?.data);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
@@ -265,24 +278,20 @@ export const postCreacteFoobolField = createAsyncThunk(
   "advantages/postCreacteFoobolField",
   async (data, { rejectWithValue }) => {
     try {
-      const newData = {
-        price: data.advantages.price,
-        schedule: data.advantages.schedule,
-        advantages: data.advantages.advantages,
-        construction_type: data.advantages.construction_type,
-      };
       const response = await axios.put(
         `${Api}admin_api/football-field-type/${data.id}/`,
-        newData,
+        data.advantages, // Передаем dataPUT напрямую
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
           },
         }
       );
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      console.error('Error in postCreacteFoobolField:', error.response?.data);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );

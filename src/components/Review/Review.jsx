@@ -14,7 +14,7 @@ export default function Review() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-[20px]">
-      {fieldsIdDetail?.advantages?.length > 0 ? (
+      {fieldsIdList?.advantages?.length > 0 ? (
         <div className="">
           <div className="p-[20px] bg-white rounded-t-[12px] border-[#2222220D] border-b-[2px]">
             <h4 className="text-[16px] leading-[18px] font-bold">
@@ -22,7 +22,7 @@ export default function Review() {
             </h4>
           </div>
           <div className="px-[20px] py-[5px] bg-white rounded-b-[12px] ">
-            {fieldsIdDetail?.advantages?.map((item, index) => {
+            {fieldsIdList?.advantages?.map((item, index) => {
               return (
                 <div
                   key={index}
@@ -40,7 +40,7 @@ export default function Review() {
                       {item?.advantages?.name}
                     </h4>
                     <p className="text-[13px] leading-[16px] text-[#222222]  font-normal opacity-70">
-                      {item?.advantages?.description}
+                      {item?.description}
                     </p>
                   </div>
                 </div>
@@ -121,7 +121,7 @@ export default function Review() {
           </div>
         </div>
       ) : null}
-      {fieldsIdDetail?.administrator ? (
+      {fieldsIdList?.administrator ? (
         <div className="">
           <div className="p-[20px] bg-white rounded-t-[12px] border-[#2222220D] border-b-[2px]">
             <h4 className="text-[16px] leading-[18px] font-bold">Контакты</h4>
@@ -131,14 +131,14 @@ export default function Review() {
               <div className="w-[40px] h-[40px] border-[1px] border-[#2222221A] flex justify-center items-center rounded-full">
                 <img
                   className="w-full h-full"
-                  src={fieldsIdDetail?.administrator?.photo || Avatar}
+                  src={fieldsIdList?.administrator?.photo || Avatar}
                   alt=""
                 />
               </div>
               <div>
                 <h4 className="text-[15px] leading-[17px] text-[#222222] font-bold">
-                  {fieldsIdDetail?.administrator?.name}{" "}
-                  {fieldsIdDetail?.administrator?.surname}
+                  {fieldsIdList?.administrator?.name}{" "}
+                  {fieldsIdList?.administrator?.surname}
                 </h4>
                 <p className="text-[13px] leading-[16px] text-[#222222]  font-normal opacity-70">
                   Администратор

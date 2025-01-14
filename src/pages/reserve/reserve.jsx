@@ -39,7 +39,7 @@ function Reserve() {
   const [arbitrator, setArbitrator] = useState(null);
   const [payment, setPayment] = useState(null);
   const [price, setPrice] = useState(null);
-
+   
   useEffect(() => {
     dispatch(fetchArbitrators());
   }, []);
@@ -49,7 +49,12 @@ function Reserve() {
   }, [id]);
 
   useEffect(() => {
-    dispatch(fetchReverse({ footballId, startDate }));
+    dispatch(
+      fetchReverse({
+        footballId: footballId || 1, // Убедитесь, что ID поля задан
+        startDate: new Date(),
+      })
+    );
   }, [footballId, startDate, booking]);
 
   const dayOfWeek = fieldsIdDetail?.schedule?.find(
@@ -88,6 +93,23 @@ function Reserve() {
 
   const handleClick = () => {
     const bookingDateISO = format(startDate, "yyyy-MM-dd'T'HH:mm:ssxxx");
+    console.log({
+      footballId,
+      start_date: time?.startTime,
+      end_date: time?.endTime,
+      booking_date: bookingDateISO,
+      duration: 1,
+      football_field_cost: price?.price || 0, // Значение по умолчанию
+      organizer: user?.id,
+      arbitrator: arbitrator?.id,
+      payment_type: payment,
+      booking_type: repeat || 0,
+      not_registered_user: {
+        phone: phone,
+        name: name,
+      },
+    });
+
     dispatch(
       fetchbookingCreate({
         booking: state?.reserve,
@@ -97,8 +119,8 @@ function Reserve() {
           end_date: time?.endTime,
           booking_date: bookingDateISO,
           duration: 1,
-          football_field_cost: price?.price,
-          organizer: user?.id,
+          football_field_cost: price?.price || 0, // Значение по умолчанию
+          organizer: user?.id || null,
           arbitrator: arbitrator?.id,
           payment_type: payment,
           booking_type: repeat || 0,
@@ -337,18 +359,20 @@ function Reserve() {
                     </div>
                   </div>
                 </div>
-                {state?.results?.reserve === "existing" ? (
+                {state?.reserve === "existing" ? (
                   <button
-                    onClick={() => payment && user && time && handleClick()}
+                    onClick={() => handleClick()}
                     className={`w-full p-[8px] rounded-[8px]  border   font-normal text-white text-[16px] leading-[19px] ${
-                      payment && user && time ? "bg-[#304add]" : "bg-[#7384E8]"
+                      payment && user?.id && time
+                        ? "bg-[#304add]"
+                        : "bg-[#7384E8]"
                     }`}
                   >
                     Забронировать поле
                   </button>
                 ) : (
                   <button
-                    onClick={() => payment && phone && name && handleClick()}
+                    onClick={() => handleClick()}
                     className={`w-full p-[8px] rounded-[8px]  border   font-normal text-white text-[16px] leading-[19px] ${
                       payment && phone && name ? "bg-[#304add]" : "bg-[#7384E8]"
                     }`}

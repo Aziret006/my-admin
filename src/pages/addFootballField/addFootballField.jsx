@@ -124,8 +124,6 @@ export default function AddFootballField() {
       setErrorList(errors);
       return;
     }
-    console.log("newName:", newName, "typeof:", typeof newName);
-    console.log("data.name:", data.name, "typeof:", typeof data.name);
 
     const newData = {
       data: processedAdvantagesList,

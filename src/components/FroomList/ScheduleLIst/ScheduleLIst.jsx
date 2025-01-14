@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 const DaySchedule = ({ day, dayState, setDayState }) => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-     setDayState((prev) => ({
+    setDayState((prev) => ({
       ...prev,
       [day]: {
         ...prev[day],
@@ -12,10 +12,11 @@ const DaySchedule = ({ day, dayState, setDayState }) => {
       },
     }));
   };
+
   return (
     <div
       className={
-        "flex gap-3 justify-between items-center rounded-[8px] py-[10px] px-[14px] bg-[#f0f0f0] border-[2px] border-[#E8E8E8]  "
+        "flex gap-3 justify-between items-center rounded-[8px] py-[10px] px-[14px] bg-[#f0f0f0] border-[2px] border-[#E8E8E8]"
       }
     >
       <p className="text-[16px] font-normal text-left leading-[18px]">
@@ -121,7 +122,6 @@ const ScheduleList = ({ setSchedule }) => {
         }
       }
     }
-
     const schedule = Object.values(newData)
       .map((entry) => {
         let [startHour, startMinute] = entry.startTime.split(":").map(Number);

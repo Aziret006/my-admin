@@ -35,7 +35,13 @@ export default function FieldsId() {
 
   useEffect(() => {
     dispatch(fetchFieldsIdList(id));
-  }, [id]);
+  }, [id, dispatch, fieldsIdList?.detail?.length]);
+
+  useEffect(() => {
+    if (footballId) {
+      dispatch(fetchFieldsIdDetail(footballId));
+    }
+  }, [footballId, dispatch]);
 
   return (
     <>
@@ -155,7 +161,7 @@ export default function FieldsId() {
                     Редактировать поле
                   </span>
                 </NavLink>
-                {fieldsIdList?.football_field_type.length > 0 && (
+                {fieldsIdList?.football_field_type?.length > 0 && (
                   <button
                     onClick={() => setFieldDelete(!fieldDelete)}
                     className="w-full lg:w-auto flex justify-center items-center gap-1 p-[8px] bg-[#FFDEDE] rounded-[8px] hover:bg-[#cb8181] duration-300"
@@ -218,24 +224,22 @@ export default function FieldsId() {
                     </button>
                   </div>
                   <div className="flex flex-col lg:flex-row items-center gap-[10px] w-full lg:w-auto">
-                    {fieldsIdList?.football_field_type?.map((item) => {
-                      return (
-                        <button
-                          key={item?.id}
-                          onClick={() => {
-                            dispatch(fetchFieldsIdDetail(item?.id));
-                            dispatch(setFootballId(item?.id));
-                          }}
-                          className={`w-full lg:w-auto px-3 xl:px-4 py-[6px] xl:py-2 font-normal text-[12px] xl:text-[14px] leading-[20px] hover:opacity-100 hover:border-[2px] duration-300 text-[#1C1C1C] border-[#222222] rounded-[8px] ${
-                            fieldsIdDetail?.id === item?.id
-                              ? "opacity-100 border-[2px]"
-                              : "opacity-70 border-[1px]"
-                          }`}
-                        >
-                          {item?.name}
-                        </button>
-                      );
-                    })}
+                    {fieldsIdList?.detail?.map((item) => (
+                      <button
+                        key={item?.id}
+                        onClick={() => {
+                          dispatch(fetchFieldsIdDetail(item?.id));
+                          dispatch(setFootballId(item?.id));
+                        }}
+                        className={`w-full lg:w-auto px-3 xl:px-4 py-[6px] xl:py-2 font-normal text-[12px] xl:text-[14px] leading-[20px] hover:opacity-100 hover:border-[2px] duration-300 text-[#1C1C1C] border-[#222222] rounded-[8px] ${
+                          fieldsIdDetail?.id === item?.id
+                            ? "opacity-100 border-[2px]"
+                            : "opacity-70 border-[1px]"
+                        }`}
+                      >
+                        {item?.name}
+                      </button>
+                    ))}
                   </div>
                 </div>
                 <div>

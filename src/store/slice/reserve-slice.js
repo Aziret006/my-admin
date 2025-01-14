@@ -7,13 +7,11 @@ import { toast, ToastContainer } from "react-toastify";
 export const fetchReverse = createAsyncThunk(
   "reserve/fetchReverse",
   async ({ footballId, startDate }, { rejectWithValue }) => {
-    const formattedDate = (date) => {
-      return moment(date).format("YYYY-MM-DD");
-    };
+    const formattedDate = (date) => moment(date).format("YYYY-MM-DD");
+   
     const date = formattedDate(startDate);
-
     try {
-      const response = await axios.get(
+      const { data } = await axios.get(
         `${Api}football_fields_api/field-booked-hours/${date}/${footballId}/`,
         {
           headers: {
@@ -21,7 +19,8 @@ export const fetchReverse = createAsyncThunk(
           },
         }
       );
-      return response.data;
+
+      return data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -43,11 +42,10 @@ export const fetchbookingCreate = createAsyncThunk(
         }
       );
       toast.success("Запись успешно создана");
-
       return response.data;
     } catch (error) {
       toast.error("Запись не создана");
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data || "An error occurred");
     }
   }
 );

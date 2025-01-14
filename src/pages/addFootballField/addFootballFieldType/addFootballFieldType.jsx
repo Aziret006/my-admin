@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,7 +11,6 @@ import {
 } from "../../../store/slice/create-foobol-slice";
 import { NavLink, useParams } from "react-router-dom";
 import { BiPlus } from "react-icons/bi";
-import { useEffect } from "react";
 import Loader from "../../../components/Loader/Loader";
 import YandexMap from "../../../components/YandexMap/YandexMap";
 import Select from "../../../components/Select/Select";
@@ -36,12 +35,14 @@ const AddFootballFieldType = () => {
     period_day: "day",
     price: 0,
   });
+
   const [priceNight, setPriceNight] = useState({
     start_time: "",
     end_time: "",
     period_day: "evening",
     price: 0,
   });
+
   const [location, setLocation] = useState();
   const [description, setDescription] = useState(null);
   const [administratorValue, setAdministratorValue] = useState();
@@ -54,13 +55,19 @@ const AddFootballFieldType = () => {
   const [selectedIamgeFile, setSelectedImageFile] = useState([]);
   const [constructionListAcc, setConstructionListAcc] = useState([]);
 
-  const handlerConstruction = (event) => {
-    const newValue = event;
-    if (!constructionListAcc?.includes(newValue)) {
-      setConstructionListAcc([...constructionListAcc, newValue]);
+  const handlerConstruction = (selectedItem) => {
+    if (!Array.isArray(constructionListAcc)) {
+      console.error("constructionListAcc is not an array");
+      return;
+    }
+    const isItemExists = constructionListAcc.some(
+      (item) => item.name === selectedItem.name
+    );
+    if (!isItemExists) {
+      setConstructionListAcc((prevList) => [...prevList, selectedItem]);
     } else {
-      setConstructionListAcc(
-        constructionListAcc.filter((item) => item !== newValue)
+      setConstructionListAcc((prevList) =>
+        prevList.filter((item) => item.name !== selectedItem.name)
       );
     }
   };
@@ -103,21 +110,92 @@ const AddFootballFieldType = () => {
       )
     );
   };
+  console.log(priceDay, "priceDay");
 
   const handleGetInfo = () => {
-    const formData = new FormData();
-    let dataPUT = [];
-    formData.append("football_f", id);
-    const price = [priceDay, priceNight];
-    dataPUT["advantages"] = advantagesList;
-    dataPUT["schedule"] = schedule;
-    dataPUT["price"] = price;
-    dataPUT["construction_type"] = constructionListAcc;
-    formData.append("description", description);
-    formData.append("name", newName);
-    selectedIamgeFile?.forEach((file) => {
-      formData.append("images", file);
+    console.log("Submitting form with name:", newName);
+    console.log("Form data:", {
+      football_f: id,
+      description,
+      name: newName,
+      images: selectedIamgeFile,
+      prices: {
+        day: priceDay,
+        night: priceNight,
+      },
+      schedule,
+      construction_type: constructionListAcc,
     });
+
+    if (!newName) {
+      console.error("Name is required");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("football_f", id);
+    formData.append("description", description || "");
+
+    if (typeof newName === "object") {
+      if (newName.slug) {
+        formData.append("name", newName.slug);
+      } else if (newName.name) {
+        formData.append("name", newName.name);
+      } else {
+        console.error("Invalid field type: missing slug or name");
+        return;
+      }
+    } else {
+      console.error("Invalid field type selected");
+      return;
+    }
+
+    if (selectedIamgeFile?.length > 0) {
+      selectedIamgeFile.forEach((file) => {
+        formData.append("images", file);
+      });
+    }
+
+    if (!priceDay.start_time || !priceDay.end_time || !priceDay.price) {
+      console.error("Please fill in all day price fields");
+      return;
+    }
+
+    if (!priceNight.start_time || !priceNight.end_time || !priceNight.price) {
+      console.error("Please fill in all night price fields");
+      return;
+    }
+
+    if (!schedule) {
+      console.error("Schedule is required");
+      return;
+    }
+
+    if (!constructionListAcc.length) {
+      console.error("Please select at least one construction type");
+      return;
+    }
+
+    const dataPUT = {
+      advantages: advantagesList,
+      schedule: schedule,
+      price: [
+        {
+          start_time: priceDay.start_time,
+          end_time: priceDay.end_time,
+          period_day: "day",
+          price: Number(priceDay.price),
+        },
+        {
+          start_time: priceNight.start_time,
+          end_time: priceNight.end_time,
+          period_day: "evening",
+          price: Number(priceNight.price),
+        },
+      ],
+      construction_type: constructionListAcc,
+    };
+
     const newData = [formData, dataPUT];
     dispatch(postCreacteFieldType(newData));
   };
@@ -147,17 +225,29 @@ const AddFootballFieldType = () => {
   };
 
   useEffect(() => {
-    setNewName(typeName && typeName[0]);
+    if (typeName && Array.isArray(typeName) && typeName.length > 0) {
+      console.log("Setting initial name:", typeName[0]);
+      setNewName(typeName[0]);
+    }
   }, [typeName]);
+
+  useEffect(() => {
+    console.log("Current newName:", newName);
+  }, [newName]);
 
   useEffect(() => {
     if (creacteFoobolStatus === "fulfilled") {
       newFoobolField();
       dispatch(getAdvantages());
       dispatch(getConstructionType());
-      console.log(creacteFoobolStatus);
     }
   }, [creacteFoobolStatus, dispatch]);
+
+  console.log(construction, "construction");
+
+  useEffect(() => {
+    console.log("TypeName from Redux:", typeName);
+  }, [typeName]);
 
   if (creacteFoobolStatus === "loading") {
     return (
@@ -198,9 +288,6 @@ const AddFootballFieldType = () => {
             </button>
           </div>
           <div className="flex items-center gap-[10px]">
-            <p className="text-[14px] text-[#1C1C1C] font-normal leading-normal">
-              Cкопировать детали предыдущих полей
-            </p>
             <label class="inline-flex items-center cursor-pointer">
               <input type="checkbox" name="checkbox" class="sr-only peer" />
               <div class="relative w-11 h-6 bg-[#78788029] rounded-full peer  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
@@ -319,9 +406,10 @@ const AddFootballFieldType = () => {
                 </p>
                 <div className={"flex gap-[10px] flex-wrap"}>
                   {construction?.results?.map((res, i) => {
-                    const isAcc = constructionListAcc?.some(
+                    const isAcc = constructionListAcc.some(
                       (el) => el.name === res.name
                     );
+
                     return (
                       <div
                         onClick={() => handlerConstruction(res)}
@@ -330,7 +418,7 @@ const AddFootballFieldType = () => {
                           isAcc ? "border-[#222222]" : "border-[#2222221a]"
                         }`}
                       >
-                        {res.name}
+                        {res?.name}
                       </div>
                     );
                   })}
@@ -349,51 +437,51 @@ const AddFootballFieldType = () => {
               </h4>
             </div>
             <div className={"flex flex-col gap-[10px] p-[20px]"}>
-             {advantages?.map((res, i) => {
-               if (res && res.id) {
-                 const isChecked = advantagesList.some(
-                   (item) => item.advantages === res.id
-                 );
-                 const currentItem =
-                   advantagesList.find((item) => item.advantages === res.id) ||
-                   {};
-                 return (
-                   <div className={"flex gap-[5px] flex-col"} key={i}>
-                     <div className="flex gap-[5px] w-full flex-col">
-                       <div className="flex items-center gap-[10px] w-full">
-                         <input
-                           onChange={(e) => {
-                             const data = [e.target.name, res.id];
-                             handleAdvantages(data, e.target.checked);
-                           }}
-                           name={res.id}
-                           type="checkbox"
-                           className="w-[22px] h-[22px] border-[1px] border-[#2222221A] rounded-[4px]"
-                         />
-                         <label className="text-[15px] leading-[17px] text-[#222222] font-normal">
-                           {res?.name}
-                         </label>
-                       </div>
-                     </div>
-                     {isChecked && (
-                       <div className={"flex gap-[10px]"}>
-                         <input
-                           className="w-full text-[14px] leading-[17px] text-[#222222] font-normal outline-none border-b-[1px] border-[#1c1c1c1a] pb-[5px]"
-                           type="text"
-                           placeholder="Добавить описание"
-                           value={currentItem.description || ""}
-                           onChange={(e) =>
-                             updateDescription(res.id, e.target.value)
-                           }
-                         />
-                       </div>
-                     )}
-                   </div>
-                 );
-               } else {
-                 return null;
-               }
-             })}
+              {advantages?.map((res, i) => {
+                if (res && res.id) {
+                  const isChecked = advantagesList.some(
+                    (item) => item.advantages === res.id
+                  );
+                  const currentItem =
+                    advantagesList.find((item) => item.advantages === res.id) ||
+                    {};
+                  return (
+                    <div className={"flex gap-[5px] flex-col"} key={i}>
+                      <div className="flex gap-[5px] w-full flex-col">
+                        <div className="flex items-center gap-[10px] w-full">
+                          <input
+                            onChange={(e) => {
+                              const data = [e.target.name, res.id];
+                              handleAdvantages(data, e.target.checked);
+                            }}
+                            name={res.id}
+                            type="checkbox"
+                            className="w-[22px] h-[22px] border-[1px] border-[#2222221A] rounded-[4px]"
+                          />
+                          <label className="text-[15px] leading-[17px] text-[#222222] font-normal">
+                            {res?.name}
+                          </label>
+                        </div>
+                      </div>
+                      {isChecked && (
+                        <div className={"flex gap-[10px]"}>
+                          <input
+                            className="w-full text-[14px] leading-[17px] text-[#222222] font-normal outline-none border-b-[1px] border-[#1c1c1c1a] pb-[5px]"
+                            type="text"
+                            placeholder="Добавить описание"
+                            value={currentItem.description || ""}
+                            onChange={(e) =>
+                              updateDescription(res.id, e.target.value)
+                            }
+                          />
+                        </div>
+                      )}
+                    </div>
+                  );
+                } else {
+                  return null;
+                }
+              })}
             </div>
           </div>
           <div className="grid gap-y-[20px] lg:gap-y-[40px] rounded-[10px]">
@@ -426,11 +514,11 @@ const AddFootballFieldType = () => {
                       />
                     </label>
                   </div>
-                  {selectedImages1?.length > 0 ? (
-                    <div className="grid  gap-[10px] grid-cols-3">
-                      {selectedImages1?.map((imageURL, index) => (
+                  {selectedImages1 && selectedImages1.length > 0 ? (
+                    <div className="grid gap-[10px] grid-cols-3">
+                      {selectedImages1.map((imageURL, index) => (
                         <img
-                          className="w-full h-200 object-cover"
+                          className="w-full h-[200px] object-cover"
                           key={index}
                           src={imageURL}
                           alt={`Uploaded image ${index + 1}`}
@@ -438,16 +526,13 @@ const AddFootballFieldType = () => {
                       ))}
                     </div>
                   ) : (
-                    <div className=" sm:grid-cols-[1fr_2fr] grid grid-cols-1  gap-x-[10px]">
+                    <div className="sm:grid-cols-[1fr_2fr] grid grid-cols-1 gap-x-[10px]">
                       <div className="w-full h-[320px] bg-[#D9D9D9]"></div>
                       <div className="grid gap-y-[10px]">
                         <div className="w-full h-[130px] bg-[#D9D9D9]"></div>
-                        <div className="flex gap-x-[10px] ">
+                        <div className="flex gap-x-[10px]">
                           <div className="w-full h-[180px] bg-[#D9D9D9]"></div>
-                          <div
-                            className="w-full h-[180px] bg
-                          -[#D9D9D9]"
-                          ></div>
+                          <div className="w-full h-[180px] bg-[#D9D9D9]"></div>
                         </div>
                       </div>
                     </div>

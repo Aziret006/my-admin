@@ -7,7 +7,8 @@ export default function YandexMap({ mapLatLon, setMapLatLon, setIsModalMap }) {
   const handleClick = (event) => {
     const coords = event.get("coords");
     setPosition(coords);
-  };
+  };  
+  
   useEffect(() => {
     setMapLatLon(position);
   }, [position]);

@@ -12,6 +12,7 @@ const BalanceCard = () => {
     direction: "ascending",
   });
   const [sortedData, setSortedData] = useState([]);
+  
 
   const [filters, setFilters] = useState({
     operationType: "all",

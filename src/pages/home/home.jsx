@@ -31,7 +31,6 @@ const Home = () => {
     error: totalIncomeError,
   } = useSelector((state) => state.totalIncome);
 
-
   useEffect(() => {
     dispatch(fetchTotalIncome());
   }, [dispatch]);
@@ -301,18 +300,17 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            {fields?.length > 0 ? (
-              <BookId
-                fieldDelete={fieldDelete}
-                setFieldDelete={setFieldDelete}
-                setDeleteValue={setDeleteValue}
-                key={fields[0].id}
-                item={fields[0]}
-              />
-            ) : (
-              <div className="flex items-center justify-center">
-                Нет данных для отображения
-              </div>
+            {fields?.results?.map(
+              (item, index) =>
+                index === 0 && (
+                  <BookId
+                    fieldDelete={fieldDelete}
+                    setFieldDelete={setFieldDelete}
+                    setDeleteValue={setDeleteValue}
+                    key={item.id}
+                    item={item}
+                  />
+                )
             )}
           </div>
         </div>
