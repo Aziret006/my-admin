@@ -59,9 +59,9 @@ export default function AddUser({ user, setUser }) {
           </div>
         )}
 
-        {users?.length > 0 && (
+        {users?.results?.length > 0 && (
           <div className="flex flex-col gap-[12px] max-h-[300px] overflow-y-auto">
-            {users?.map((user) => (
+            {users?.results?.map((user) => (
               <div
                 onClick={() => {
                   setUser(user);
@@ -85,7 +85,7 @@ export default function AddUser({ user, setUser }) {
             ))}
           </div>
         )}
-        {users?.length === 0 && (
+        {users?.results?.length === 0 && (
           <p className="text-[15px] text-center text-[#1C1C1C] font-normal leading-[18px] opacity-70">
             Пользователь не найден
           </p>

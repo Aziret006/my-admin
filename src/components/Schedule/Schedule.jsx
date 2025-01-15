@@ -33,6 +33,8 @@ export default function Schedule() {
       title: "Воскресенье",
     },
   ];
+  console.log(fieldsIdDetail?.schedule);
+  
 
   return (
     <>

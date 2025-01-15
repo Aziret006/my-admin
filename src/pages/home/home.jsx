@@ -187,15 +187,24 @@ const Home = () => {
           <div className={s.Block1Text}>
             <p className={s.Block1TextP}>Количество заказов</p>
             <div>
-              <h3>2.568</h3>
+              <h3>
+                {/* {numbersData.growth_percentage
+                  // ? numbersData.growth_percentage + "%"
+                  : "0%"} */}
+                {numbersData?.data?.[0]?.bookings}
+              </h3>
               <span>
-                <p
+                <span
                   style={{
-                    color: "#4C8E4C",
+                    color:
+                      typeof numbersData?.growth_percentage === "number" &&
+                      numbersData.growth_percentage < 0
+                        ? "#FF0000"
+                        : "#4C8E4C",
                   }}
                 >
-                  +2.5%
-                </p>
+                  {numbersData?.growth_percentage ?? "0"}%
+                </span>
                 по сравнению с прошлой неделей
               </span>
               <p>Расчёт с 1 по 6 Декабря 2024</p>
@@ -214,14 +223,24 @@ const Home = () => {
           <div className={s.Block1Text}>
             <p className={s.Block1TextP}>Общая сумма дохода</p>
             <div>
-              <h3>$54.2K</h3>
+              <h3>${totalIncomeData?.data?.income}</h3>
               <span>
                 <p
                   style={{
                     color: "#4C8E4C",
                   }}
                 >
-                  +2.5%
+                  <span
+                    style={{
+                      color:
+                        typeof numbersData?.growth_percentage === "number" &&
+                        numbersData.growth_percentage < 0
+                          ? "#FF0000"
+                          : "#4C8E4C",
+                    }}
+                  >
+                    {numbersData?.growth_percentage ?? "0"}%
+                  </span>
                 </p>
                 по сравнению с прошлой неделей
               </span>
@@ -243,11 +262,21 @@ const Home = () => {
           <p>Кол-во новых клиентов</p>
           <div className={s.ChartBasic}>
             <span>
-              <p>18</p>
-              <p>
-                <span style={{ color: "#4C8E4C" }}>+2.5%</span> по сравнению с
-                прошлой неделей
-              </p>
+              <p>{data.growth_percentage}</p>
+              <span>
+                <span
+                  style={{
+                    color:
+                      typeof data?.growth_percentage === "number" &&
+                      data.growth_percentage < 0
+                        ? "#FF0000"
+                        : "#4C8E4C",
+                  }}
+                >
+                  {data?.growth_percentage ?? "0"}%
+                </span>
+                <p>по сравнению с прошлой неделей</p>
+              </span>
             </span>
             <div className={s.ChartAll}>
               <Chart

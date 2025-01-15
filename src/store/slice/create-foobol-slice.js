@@ -46,7 +46,7 @@ export const getBranchGetId = createAsyncThunk(
           },
         }
       );
-      
+
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -58,15 +58,12 @@ export const createFoobolField = createAsyncThunk(
   "advantages/createFoobolField",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${Api}admin_api/football_field/`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          data,
-        }
-      );
+      const response = await axios.post(`${Api}admin_api/football_field/`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        data,
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -90,7 +87,6 @@ export const getLocationsCities = createAsyncThunk(
   }
 );
 
-
 export const fetchAdministrators = createAsyncThunk(
   "administrators/fetchAdministrators",
   async (_, { rejectWithValue }) => {
@@ -102,7 +98,9 @@ export const fetchAdministrators = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || 'Ошибка при загрузке администраторов');
+      return rejectWithValue(
+        error.response?.data || "Ошибка при загрузке администраторов"
+      );
     }
   }
 );
@@ -134,7 +132,6 @@ export const postAdvantages = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-
       if (error.response) {
         return rejectWithValue(error.response.data);
       } else if (error.request) {
@@ -189,8 +186,6 @@ export const patchAdvantages = createAsyncThunk(
   }
 );
 
-
-
 export const getSportComplexList = createAsyncThunk(
   "advantages/getSportComplexList",
   async (_, { rejectWithValue }) => {
@@ -214,14 +209,11 @@ export const getFieldsTypeName = createAsyncThunk(
   "typeName/getFieldsTypeName",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${Api}admin_api/field-type-name/`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const response = await axios.get(`${Api}admin_api/field-type-name/`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -234,7 +226,7 @@ export const postCreacteFieldType = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const [formData, dataPUT] = data;
-      
+
       // Первый запрос - создание поля
       const response = await axios.post(
         `${Api}admin_api/football-field-type/`,
@@ -249,6 +241,8 @@ export const postCreacteFieldType = createAsyncThunk(
 
       const id = response.data.id;
 
+      console.log(dataPUT.name, "namem");
+
       // Второй запрос с обновленными данными
       const updateResponse = await axios.put(
         `${Api}admin_api/football-field-type/${id}/`,
@@ -256,7 +250,8 @@ export const postCreacteFieldType = createAsyncThunk(
           advantages: dataPUT.advantages,
           schedule: dataPUT.schedule,
           price: dataPUT.price,
-          construction_type: dataPUT.construction_type
+          construction_type: dataPUT.construction_type,
+          name: dataPUT.name,
         },
         {
           headers: {
@@ -268,7 +263,7 @@ export const postCreacteFieldType = createAsyncThunk(
 
       return updateResponse.data;
     } catch (error) {
-      console.error('Error details:', error.response?.data);
+      console.error("Error details:", error.response?.data);
       return rejectWithValue(error.response?.data || error.message);
     }
   }
@@ -290,7 +285,7 @@ export const postCreacteFoobolField = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      console.error('Error in postCreacteFoobolField:', error.response?.data);
+      console.error("Error in postCreacteFoobolField:", error.response?.data);
       return rejectWithValue(error.response?.data || error.message);
     }
   }
@@ -312,7 +307,7 @@ export const advantagesSlice = createSlice({
     construction: null,
     typeName: null,
     administrators: null,
-    isUbdate: false
+    isUbdate: false,
   },
   reducers: {
     setIsCreate: (state, action) => {
@@ -321,8 +316,7 @@ export const advantagesSlice = createSlice({
 
     setIsUbdate: (state, action) => {
       state.isUbdate = action.payload;
-    }
-
+    },
   },
   extraReducers: (builder) => {
     builder

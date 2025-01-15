@@ -11,7 +11,6 @@ export const fetchFields = createAsyncThunk(
     try {
       const token = localStorage.getItem("token");
 
-      // Проверяем, существует ли токен
       if (!token) {
         throw new Error("Токен авторизации отсутствует");
       }

@@ -54,6 +54,7 @@ const AddFootballFieldType = () => {
   const [selectedImages1, setSelectedImages1] = useState([]);
   const [selectedIamgeFile, setSelectedImageFile] = useState([]);
   const [constructionListAcc, setConstructionListAcc] = useState([]);
+  console.log(advantagesList, "aziret");
 
   const handlerConstruction = (selectedItem) => {
     if (!Array.isArray(constructionListAcc)) {
@@ -85,7 +86,7 @@ const AddFootballFieldType = () => {
     });
   };
 
-  const [newName, setNewName] = useState(null);
+  const [newName, setNewName] = useState([]);
 
   const handleAdvantages = (data, isChecked) => {
     const resId = data[1];
@@ -110,24 +111,9 @@ const AddFootballFieldType = () => {
       )
     );
   };
-  console.log(priceDay, "priceDay");
 
   const handleGetInfo = () => {
-    console.log("Submitting form with name:", newName);
-    console.log("Form data:", {
-      football_f: id,
-      description,
-      name: newName,
-      images: selectedIamgeFile,
-      prices: {
-        day: priceDay,
-        night: priceNight,
-      },
-      schedule,
-      construction_type: constructionListAcc,
-    });
-
-    if (!newName) {
+    if (!newName || (!newName.name && !newName.slug)) {
       console.error("Name is required");
       return;
     }
@@ -136,19 +122,10 @@ const AddFootballFieldType = () => {
     formData.append("football_f", id);
     formData.append("description", description || "");
 
-    if (typeof newName === "object") {
-      if (newName.slug) {
-        formData.append("name", newName.slug);
-      } else if (newName.name) {
-        formData.append("name", newName.name);
-      } else {
-        console.error("Invalid field type: missing slug or name");
-        return;
-      }
-    } else {
-      console.error("Invalid field type selected");
-      return;
-    }
+    const nameValue =
+      typeof newName === "object" ? newName.name || newName.slug : newName;
+
+    formData.append("name", newName.slug);
 
     if (selectedIamgeFile?.length > 0) {
       selectedIamgeFile.forEach((file) => {
@@ -179,6 +156,7 @@ const AddFootballFieldType = () => {
     const dataPUT = {
       advantages: advantagesList,
       schedule: schedule,
+      name: newName?.slug,
       price: [
         {
           start_time: priceDay.start_time,
@@ -193,11 +171,16 @@ const AddFootballFieldType = () => {
           price: Number(priceNight.price),
         },
       ],
+
       construction_type: constructionListAcc,
     };
 
     const newData = [formData, dataPUT];
     dispatch(postCreacteFieldType(newData));
+
+    console.log("FormData contents:");
+    for (let pair of formData.entries()) {
+    }
   };
 
   useEffect(() => {
@@ -226,8 +209,17 @@ const AddFootballFieldType = () => {
 
   useEffect(() => {
     if (typeName && Array.isArray(typeName) && typeName.length > 0) {
-      console.log("Setting initial name:", typeName[0]);
-      setNewName(typeName[0]);
+      const firstType = typeName[0];
+      if (firstType) {
+        const nameValue = firstType.slug || firstType.name;
+        if (nameValue) {
+          setNewName(firstType);
+        } else {
+          console.error(
+            "Invalid type name format - missing both slug and name"
+          );
+        }
+      }
     }
   }, [typeName]);
 
@@ -249,13 +241,13 @@ const AddFootballFieldType = () => {
     console.log("TypeName from Redux:", typeName);
   }, [typeName]);
 
-  if (creacteFoobolStatus === "loading") {
-    return (
-      <div>
-        <Loader />
-      </div>
-    );
-  }
+  // if (creacteFoobolStatus === "loading") {
+  //   return (
+  //     <div>
+  //       <Loader />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="mx-[20px] mt-[90px] mb-7">
@@ -267,33 +259,6 @@ const AddFootballFieldType = () => {
             setIsModalMap={setIsModalMap}
           />
         )}
-        <div
-          className={
-            "mt-[50px] p-[15px] xl:p-[20px] rounded-[10px] bg-[#fff] flex  gap-[10px] justify-between items-center"
-          }
-        >
-          <div className="flex flex-col lg:flex-row items-center gap-[10px] w-full lg:w-auto">
-            {fieldsIdInfo?.football_field_type?.map((res) => (
-              <button
-                className={`w-full lg:w-auto px-3 xl:px-4 py-[6px] xl:py-2 font-normal text-[12px] xl:text-[14px] leading-[20px] hover:bg-[#1C1C1C] hover:text-[#fff] hover:shadow-md duration-300 text-[#1C1C1C] #222222 border-[1px] border-[#222222] rounded-[8px] `}
-              >
-                {res?.name}
-              </button>
-            ))}
-            <button
-              onClick={() => newFoobolField()}
-              className={`px-3 xl:px-4 py-[6px] xl:py-2 font-normal text-[12px] xl:text-[14px] leading-[20px] hover:bg-[#1C1C1C] hover:text-[#fff] duration-300 text-[#1C1C1C] #222222 border-[1px] border-[#222222] rounded-[8px]`}
-            >
-              <BiPlus className="w-5 h-5" />
-            </button>
-          </div>
-          <div className="flex items-center gap-[10px]">
-            <label class="inline-flex items-center cursor-pointer">
-              <input type="checkbox" name="checkbox" class="sr-only peer" />
-              <div class="relative w-11 h-6 bg-[#78788029] rounded-full peer  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
-            </label>
-          </div>
-        </div>
         <div className="xl:grid-cols-2 mt-[10px] grid grid-cols-1 gap-[20px] xl:px-[5px] px-[5px]">
           <div className="rounded-[10px] h-min bg-[#ffffff]">
             <div className="w-full border-b border-solid border-gray-200 p-[20px]">

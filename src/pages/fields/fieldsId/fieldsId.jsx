@@ -32,6 +32,7 @@ export default function FieldsId() {
   const { fieldsIdList, fieldsIdDetail, footballId, loading } = useSelector(
     (state) => state.fields
   );
+  console.log(fieldsIdList, "ernis");
 
   useEffect(() => {
     dispatch(fetchFieldsIdList(id));
@@ -42,6 +43,7 @@ export default function FieldsId() {
       dispatch(fetchFieldsIdDetail(footballId));
     }
   }, [footballId, dispatch]);
+  console.log(fieldsIdList?.football_field_type, "sadsadasdasd");
 
   return (
     <>
@@ -224,7 +226,7 @@ export default function FieldsId() {
                     </button>
                   </div>
                   <div className="flex flex-col lg:flex-row items-center gap-[10px] w-full lg:w-auto">
-                    {fieldsIdList?.detail?.map((item) => (
+                    {fieldsIdList?.football_field_type?.map((item) => (
                       <button
                         key={item?.id}
                         onClick={() => {

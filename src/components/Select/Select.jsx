@@ -8,9 +8,18 @@ export default function Select({ setName, name }) {
   const { typeName } = useSelector((state) => state.createFoobol);
 
   const handleSelect = (option) => {
-    setName(option);
+    setName({
+      name: option.name,
+      slug: option.slug
+    });
     setSelect(false);
   };
+
+  const options = [
+    { name: 'Стандарт', slug: 'standart' },
+    { name: 'Футзал', slug: 'futzal' },
+    { name: 'Мини зал', slug: 'mini_zal' }
+  ];
 
   return (
     <div className="flex flex-col gap-y-[8px]">
@@ -34,18 +43,18 @@ export default function Select({ setName, name }) {
               className="w-full h-full fixed top-0 left-0 bg-[rgba(255,255,255,0.3)] z-40"
             ></div>
             <div className="absolute w-[50%] right-0 top-[40px] h-auto bg-[#fff] rounded-[14px] p-[14px] shadow-md z-50 flex flex-col gap-y-[10px]">
-              {typeName?.results?.map((item, index) => (
+              {options.map((item, index) => (
                 <div
                   key={index}
                   onClick={() => handleSelect(item)}
                   className={`flex justify-between items-center px-[17px] py-[5px] rounded-[10px] cursor-pointer ${
-                    item?.name === (typeof name === 'string' ? name : name?.name) ? "bg-[#F0F0F0]" : ""
+                    item.name === (typeof name === 'string' ? name : name?.name) ? "bg-[#F0F0F0]" : ""
                   }`}
                 >
                   <p className="text-[15px] text-[#0E1422] font-normal leading-[26px]">
-                    {item?.name}
+                    {item.name}
                   </p>
-                  {item?.name === (typeof name === 'string' ? name : name?.name) && <FaCheck className="w-4 h-4" />}
+                  {item.name === (typeof name === 'string' ? name : name?.name) && <FaCheck className="w-4 h-4" />}
                 </div>
               ))}
             </div>

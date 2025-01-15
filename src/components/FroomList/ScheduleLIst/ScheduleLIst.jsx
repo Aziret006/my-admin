@@ -2,8 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const DaySchedule = ({ day, dayState, setDayState }) => {
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    if (type === "time") {
+      const [hours, minutes] = value.split(":").map(Number);
+      if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+        return;
+      }
+    }
+
     setDayState((prev) => ({
       ...prev,
       [day]: {
@@ -34,8 +43,8 @@ const DaySchedule = ({ day, dayState, setDayState }) => {
           <input
             className="md:w-full  font-normal text-[14px] md:text-[18px] leading-[17px] text-left outline-none bg-transparent"
             type="time"
-            name="endime"
-            value={dayState[day].endime}
+            name="endTime"
+            value={dayState[day].endTime}
             onChange={handleChange}
           />
         </div>
@@ -59,15 +68,24 @@ const ScheduleList = ({ setSchedule }) => {
     (state) => state.fields
   );
 
-
   const [dayState, setDayState] = useState({
-    понедельник: { day_of_week: 1, endime: "", startTime: "", checkbox: false },
-    вторник: { day_of_week: 2, endime: "", startTime: "", checkbox: false },
-    среда: { day_of_week: 3, endime: "", startTime: "", checkbox: false },
-    четверг: { day_of_week: 4, endime: "", startTime: "", checkbox: false },
-    пятница: { day_of_week: 5, endime: "", startTime: "", checkbox: false },
-    суббота: { day_of_week: 6, endime: "", startTime: "", checkbox: false },
-    воскресенье: { day_of_week: 7, endime: "", startTime: "", checkbox: false },
+    понедельник: {
+      day_of_week: 1,
+      endTime: "",
+      startTime: "",
+      checkbox: false,
+    },
+    вторник: { day_of_week: 2, endTime: "", startTime: "", checkbox: false },
+    среда: { day_of_week: 3, endTime: "", startTime: "", checkbox: false },
+    четверг: { day_of_week: 4, endTime: "", startTime: "", checkbox: false },
+    пятница: { day_of_week: 5, endTime: "", startTime: "", checkbox: false },
+    суббота: { day_of_week: 6, endTime: "", startTime: "", checkbox: false },
+    воскресенье: {
+      day_of_week: 7,
+      endTime: "",
+      startTime: "",
+      checkbox: false,
+    },
   });
 
   const updateDayStateWithSchedule = (schedule, setDayState, dayState) => {
@@ -79,7 +97,7 @@ const ScheduleList = ({ setSchedule }) => {
         updatedDayState[dayName] = {
           ...dayInfo,
           startTime: "00:00",
-          endime: "00:00",
+          endTime: "00:00",
           checkbox: false,
         };
       }
@@ -93,7 +111,7 @@ const ScheduleList = ({ setSchedule }) => {
         updatedDayState[dayName] = {
           ...updatedDayState[dayName],
           startTime: start_time,
-          endime: end_time,
+          endTime: end_time,
           checkbox: true,
         };
       }
@@ -115,34 +133,31 @@ const ScheduleList = ({ setSchedule }) => {
   useEffect(() => {
     const newData = {};
     for (const day in dayState) {
-      if (dayState[day].checkbox && dayState[day].endime !== "") {
-        if (dayState[day].startTime !== "") {
-          newData[day] = { ...dayState[day] };
-          delete newData[day].checkbox;
-        }
+      if (
+        dayState[day].checkbox &&
+        dayState[day].endTime &&
+        dayState[day].startTime &&
+        dayState[day].endTime !== "00:00" &&
+        dayState[day].startTime !== "00:00"
+      ) {
+        newData[day] = { ...dayState[day] };
+        delete newData[day].checkbox;
       }
     }
+
     const schedule = Object.values(newData)
       .map((entry) => {
-        let [startHour, startMinute] = entry.startTime.split(":").map(Number);
-        let [endHour, endMinute] = entry.endime.split(":").map(Number);
-
-        if (
-          startHour > endHour ||
-          (startHour === endHour && startMinute > endMinute)
-        ) {
-          endHour += 24;
-        }
-
         return {
           day_of_week: entry.day_of_week,
           start_time: entry.startTime,
-          end_time: entry.endime,
+          end_time: entry.endTime,
         };
       })
       .sort((a, b) => a.day_of_week - b.day_of_week);
 
-    setSchedule(schedule);
+    if (schedule.length > 0) {
+      setSchedule(schedule);
+    }
   }, [dayState, setSchedule]);
 
   return (
