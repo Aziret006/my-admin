@@ -1,208 +1,220 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useRef, useEffect } from "react";
+
+import { useState } from "react";
+
 import { IoMdArrowDropdown } from "react-icons/io";
+
 import { IoCalendarClearOutline } from "react-icons/io5";
-import { walletget, walletgetSorted } from "../../store/slice/wallet-slice.js";
+
+import { useDispatch, useSelector } from "react-redux";
+import { walletget } from "../../store/slice/wallet-slice";
+import { getBookings } from "../../store/slice/sorting-slice";
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+
+  const months = [
+    "Января",
+    "Февраля",
+    "Марта",
+    "Апреля",
+    "Мая",
+    "Июня",
+    "Июля",
+
+    "Августа",
+
+    "Сентября",
+
+    "Октября",
+
+    "Ноября",
+
+    "Декабря",
+  ];
+
+  const day = date.getDate();
+
+  const month = months[date.getMonth()];
+
+  const hours = date.getHours().toString().padStart(2, "0");
+
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+
+  return {
+    date: `${day} ${month}`,
+
+    time: `${hours}:${minutes}`,
+  };
+};
+
 const BalanceCard = () => {
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector((state) => state.wallet);
 
-  const [sortConfig, setSortConfig] = useState({
-    key: null,
-    direction: "ascending",
-  });
-  const [sortedData, setSortedData] = useState([]);
-  
-
-  const [filters, setFilters] = useState({
-    operationType: "all",
-    dateFrom: "",
-    dateTo: "",
-  });
-
-  const dateInputRef1 = useRef(null);
-  const dateInputRef2 = useRef(null);
+  const { data, loading } = useSelector((state) => state.wallet);
+  const { sortedData } = useSelector((state) => state.sorting);
 
   useEffect(() => {
     dispatch(walletget());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (data.length > 0) {
-      const sorted = sortData(data);
-      setSortedData(sorted);
-    }
-  }, [data, sortConfig]);
-
-  const handleOperationTypeChange = (e) => {
-    setFilters((prev) => ({
-      ...prev,
-      operationType: e.target.value,
-    }));
-  };
-
-  const handleDateFromChange = (e) => {
-    const date = e.target.value;
-    setFilters((prev) => ({
-      ...prev,
-      dateFrom: date,
-    }));
-  };
-
-  const handleDateToChange = (e) => {
-    const date = e.target.value;
-    setFilters((prev) => ({
-      ...prev,
-      dateTo: date,
-    }));
-  };
-
-  const handleDatePickerClick = (ref) => {
-    ref.current && ref.current.showPicker();
-  };
-
-  const formatDate = (dateStr, options) => {
-    const date = new Date(dateStr);
-    return date.toLocaleString("ru-RU", options);
-  };
-
-  const handleSearch = () => {
-    if (filters.dateFrom && filters.dateTo) {
-      dispatch(
-        walletgetSorted({ start: filters.dateFrom, end: filters.dateTo })
-      );
-    } else {
-      dispatch(walletget());
+  const handleButtonClick = () => {
+    if (dateInputRef.current) {
+      dateInputRef.current.showPicker();
     }
   };
 
-  const sortData = (data) => {
-    if (!sortConfig.key) return data;
-    return [...data].sort((a, b) => {
-      if (a[sortConfig.key] < b[sortConfig.key]) {
-        return sortConfig.direction === "ascending" ? -1 : 1;
-      }
-      if (a[sortConfig.key] > b[sortConfig.key]) {
-        return sortConfig.direction === "ascending" ? 1 : -1;
-      }
-      return 0;
-    });
+  const transactions = sortedData.length > 0 ? sortedData : data || [];
+
+  const [testValue, setTestValue] = useState(null);
+
+  const dateInputRef = useRef(null);
+
+  const isDateSelected = testValue !== null;
+
+  const handleButtonClick2 = () => {
+    if (dateInputRef2.current) {
+      dateInputRef2.current.showPicker();
+    }
   };
 
-  const requestSort = (key) => {
-    let direction = "ascending";
-    if (sortConfig.key === key && sortConfig.direction === "ascending") {
-      direction = "descending";
-    }
-    setSortConfig({ key, direction });
-  };
+  const [testValue2, setTestValue2] = useState(null);
+
+  const dateInputRef2 = useRef(null);
+
+  const isDateSelected2 = testValue2 !== null;
 
   const renderTransaction = (transaction, index) => (
     <tr key={transaction.id || index}>
-      <td className="px-6 py-[4px] whitespace-nowrap">{transaction.type}</td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div>
-          {formatDate(transaction.create_date, {
-            day: "numeric",
-            month: "long",
-          })}
-        </div>
-        <div className="text-gray-500 text-sm">
-          {formatDate(transaction.create_date, {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+      <td className="px-6 py-[4px] whitespace-nowrap">
+        {transaction.type || transaction.type}
+      </td>
+
+      <td className="px-6 py-4">
+        <div className="flex flex-col">
+          <span className="text-gray-900">
+            {formatDate(transaction.date || transaction.create_date).date}
+          </span>
+
+          <span className="text-gray-500 text-sm">
+            {formatDate(transaction.date || transaction.create_date).time}
+          </span>
         </div>
       </td>
+
       <td
-        className={`px-6 py-4 whitespace-nowrap ${
-          transaction.football_field_cost < 0
-            ? "text-red-500"
-            : "text-green-500"
+        className={`px-6 py-4 whitespace-nowrap text-${
+          transaction.amount < 0 ? "red-500" : "green-500"
         }`}
       >
-        {transaction.football_field_cost} сом
+       +{transaction.amount || transaction.football_field_cost} сом
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">{transaction.created_by}</td>
-      <td className="px-6 py-4 whitespace-nowrap">{transaction.field_type}</td>
+
+      <td className="px-6 py-4 whitespace-nowrap">
+        {transaction.user || transaction.created_by || "-"}
+      </td>
+
+      <td className="px-6 py-4 whitespace-nowrap">
+        {transaction.field || transaction.field_type || "-"}
+      </td>
+
       <td className="px-6 py-4 whitespace-nowrap">
         <span className="flex items-center gap-x-[5px] px-2 py-1 rounded">
           <IoCalendarClearOutline />
-          {transaction.payment_type}
+
+          {transaction.paymentSystem || transaction.payment_type || "-"}
         </span>
       </td>
     </tr>
   );
 
+  const handleSearch = () => {
+    if (testValue && testValue2) {
+      dispatch(
+        getBookings({
+          startDate: testValue,
+          endDate: testValue2,
+        })
+      );
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[200px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="grid gap-y-[30px] rounded-[15px]">
-      {/* Filter and search section */}
-      <div className="gap-y-[20px] grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-[16px] w-full rounded-[15px] bg-white p-[18px]">
-        {/* Operation type filter */}
-        <div className="flex items-center bg-[#F7F8F9] rounded-[10px] w-full h-[50px] px-[10px]">
-          <select
-            className="outline-none w-full bg-[#F7F8F9]"
-            onChange={handleOperationTypeChange}
-            value={filters.operationType}
-          >
-            <option value="all">Все операции</option>
-            <option value="booking">Бронирование</option>
-            <option value="withdrawal">Вывод</option>
+    <div className=" grid gap-y-[30px] rounded-[15px]">
+      <div className="gap-y-[20px] grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-[16px] w-full rounded-[15px] bg-[#fff]  p-[18px]">
+        <div className="flex items-center bg-[#F7F8F9] rounded-[10px] w-full h-[50px] px-[10px] ">
+          <select className="outline-none flex justify-between w-full bg-[#F7F8F9]">
+            <option>Все операции</option>
+            <option>Бронирование</option>
+            <option>Вывод</option>
           </select>
         </div>
-        {/* Date from filter */}
-        <div
-          className="relative flex justify-between bg-[#F7F8F9] rounded-[10px] w-full h-[50px] px-[10px]"
-          onClick={() => handleDatePickerClick(dateInputRef1)}
-        >
-          <div className="flex items-center space-x-1">
-            <IoCalendarClearOutline
-              className={`${
-                filters.dateFrom ? "text-black" : "text-[#B8C0CC]"
-              }`}
+        <div className="flex justify-between bg-[#F7F8F9] rounded-[10px] w-full h-[50px] px-[10px] ">
+          <div
+            className="flex items-center justify-between w-full"
+            onClick={handleButtonClick}
+          >
+            <div className="flex items-center space-x-1">
+              <IoCalendarClearOutline
+                className={`text-${isDateSelected ? "black" : "[#B8C0CC]"}`}
+              />
+
+              <input
+                ref={dateInputRef}
+                type="date"
+                onChange={(e) => setTestValue(e.target.value)}
+                className="h-[50px] bg-[#F7F8F9] flex items-center rounded-[10px]"
+              />
+
+              <h4 className={`text-${isDateSelected ? "black" : "[#B8C0CC]"}`}>
+                {testValue !== null ? testValue : "Все операции"}
+              </h4>
+            </div>
+
+            <IoMdArrowDropdown
+              size={30}
+              onChange={(e) => setTestValue(e.target.value)}
             />
-            <input
-              ref={dateInputRef1}
-              type="date"
-              value={filters.start}
-              onChange={handleDateFromChange}
-              className="h-[50px] bg-[#F7F8F9] rounded-[10px]"
-            />
-            <h4
-              className={`${
-                filters.dateFrom ? "text-black" : "text-[#B8C0CC]"
-              }`}
-            >
-              {filters.dateFrom || "Период с"}
-            </h4>
           </div>
-          <IoMdArrowDropdown size={30} className="mt-[10px]" />
         </div>
-        {/* Date to filter */}
-        <div
-          className="flex justify-between bg-[#F7F8F9] rounded-[10px] w-full h-[50px] px-[10px]"
-          onClick={() => handleDatePickerClick(dateInputRef2)}
-        >
-          <div className="flex items-center space-x-1">
-            <IoCalendarClearOutline
-              className={`${filters.dateTo ? "text-black" : "text-[#B8C0CC]"}`}
+
+        <div className="bg-[#F7F8F9] rounded-[10px] w-full h-[50px] px-[10px] ">
+          <div
+            className="flex items-center justify-between w-full"
+            onClick={handleButtonClick2}
+          >
+            <div className="flex items-center space-x-1">
+              <IoCalendarClearOutline
+                className={`text-${isDateSelected2 ? "black" : "[#B8C0CC]"}`}
+              />
+
+              <input
+                ref={dateInputRef2}
+                onChange={(e) => setTestValue2(e.target.value)}
+                type="date"
+                className="h-[50px] bg-[#F7F8F9] flex items-center rounded-[10px]"
+              />
+
+              <h4 className={`text-${isDateSelected2 ? "black" : "[#B8C0CC]"}`}>
+                {testValue2 !== null ? testValue2 : "Все операции"}
+              </h4>
+            </div>
+
+            <IoMdArrowDropdown
+              size={30}
+              onChange={(e) => setTestValue2(e.target.value)}
             />
-            <input
-              ref={dateInputRef2}
-              type="date"
-              value={filters.end}
-              onChange={handleDateToChange}
-              className="h-[50px] bg-[#F7F8F9] rounded-[10px]"
-            />
-            <h4
-              className={`${filters.dateTo ? "text-black" : "text-[#B8C0CC]"}`}
-            >
-              {filters.dateTo || "Период до"}
-            </h4>
           </div>
-          <IoMdArrowDropdown size={30} className="mt-[10px]" />
         </div>
-        {/* Search button */}
+
         <button
           onClick={handleSearch}
           className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold h-[50px] px-[10px] rounded-[10px] inline-flex gap-x-[8px] justify-center items-center"
@@ -221,6 +233,7 @@ const BalanceCard = () => {
               strokeLinecap="round"
               strokeLinejoin="round"
             />
+
             <path
               d="M15.1663 14.6667L13.833 13.3334"
               stroke="white"
@@ -232,84 +245,40 @@ const BalanceCard = () => {
           Поиск
         </button>
       </div>
-      {/* Table section */}
+
       <div className="w-full overflow-x-auto rounded-[15px]">
         <table className="min-w-full bg-white rounded-[15px]">
           <thead className="bg-gray-50">
             <tr>
-              <th
-                onClick={() => requestSort("type")}
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-              >
-                Тип операции{" "}
-                {sortConfig.key === "type" &&
-                  (sortConfig.direction === "ascending" ? "▲" : "▼")}
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Тип операции
               </th>
-              <th
-                onClick={() => requestSort("create_date")}
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-              >
-                Дата{" "}
-                {sortConfig.key === "create_date" &&
-                  (sortConfig.direction === "ascending" ? "▲" : "▼")}
+
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Дата
               </th>
-              <th
-                onClick={() => requestSort("football_field_cost")}
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-              >
-                Приход{" "}
-                {sortConfig.key === "football_field_cost" &&
-                  (sortConfig.direction === "ascending" ? "▲" : "▼")}
+
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Приход
               </th>
-              <th
-                onClick={() => requestSort("created_by")}
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-              >
-                Пользователь{" "}
-                {sortConfig.key === "created_by" &&
-                  (sortConfig.direction === "ascending" ? "▲" : "▼")}
+
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Пользователь
               </th>
-              <th
-                onClick={() => requestSort("payment_type")}
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-              >
-                Футбольное поле{" "}
-                {sortConfig.key === "payment_type" &&
-                  (sortConfig.direction === "ascending" ? "▲" : "▼")}
+
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Футбольное поле
               </th>
-              <th
-                onClick={() => requestSort("payment_type")}
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-              >
-                Платеж.система{" "}
-                {sortConfig.key === "payment_type" &&
-                  (sortConfig.direction === "ascending" ? "▲" : "▼")}
+
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Платеж.система
               </th>
             </tr>
           </thead>
+
           <tbody className="bg-white divide-y divide-gray-200">
-            {loading ? (
-              <tr>
-                <td colSpan="6" className="text-center py-4">
-                  Загрузка...
-                </td>
-              </tr>
-            ) : error ? (
-              <tr>
-                <td colSpan="6" className="text-center py-4 text-red-500">
-                  Ошибка: {error}
-                </td>
-              </tr>
-            ) : sortedData?.length ? (
-              sortedData.map((transaction, index) =>
-                renderTransaction(transaction, index)
-              )
-            ) : (
-              <tr>
-                <td colSpan="6" className="text-center py-4">
-                  Нет данных
-                </td>
-              </tr>
+            {transactions.map((transaction, index) =>
+              renderTransaction(transaction, index)
             )}
           </tbody>
         </table>

@@ -147,6 +147,7 @@ export default function Review() {
             </div>
             <div className="grid grid-cols-4 gap-[10px] py-[15px]">
               {fieldsIdDetail?.administrator?.whatsup &&
+                Array.isArray(fieldsIdDetail?.administrator?.whatsup) &&
                 fieldsIdDetail?.administrator?.whatsup?.map((el, index) => {
                   return (
                     <div
@@ -161,12 +162,13 @@ export default function Review() {
                         <FaWhatsapp className="w-[24px] h-[24px]" />
                       </NavLink>
                       <p className="text-[13px] leading-[16px] text-[#222222]  font-normal">
-                        Whats’App
+                        Whats'App
                       </p>
                     </div>
                   );
                 })}
               {fieldsIdDetail?.administrator?.telegram &&
+                Array.isArray(fieldsIdDetail?.administrator?.telegram) &&
                 fieldsIdDetail?.administrator?.telegram?.map((el, index) => {
                   return (
                     <div
@@ -175,7 +177,7 @@ export default function Review() {
                     >
                       <NavLink
                         target="_blank"
-                        to={`https://t.me/${el}  `}
+                        to={`https://t.me/${el}`}
                         className="w-[40px] h-[40px] border-[1px] border-[#2222221A] flex justify-center items-center rounded-full"
                       >
                         <FaTelegram className="w-[24px] h-[24px]" />
@@ -186,23 +188,25 @@ export default function Review() {
                     </div>
                   );
                 })}
-              {fieldsIdDetail?.administrator?.contact?.map((el, index) => {
-                return (
-                  <div key={index} className="flex flex-col items-center gap-1">
-                    <NavLink
-                      target="_blank"
-                      to={`tel:+${el}`}
-                      className="w-[40px] h-[40px] border-[1px] border-[#2222221A] flex justify-center items-center rounded-full"
-                    >
-                      <FaPhone className="w-[24px] h-[24px]" />
-                    </NavLink>
-                    <p className="text-[13px] leading-[16px] text-[#222222]  font-normal">
-                      Позвонить
-                    </p>
-                  </div>
-                );
-              })}
+              {Array.isArray(fieldsIdDetail?.administrator?.contact) &&
+                fieldsIdDetail?.administrator?.contact?.map((el, index) => {
+                  return (
+                    <div key={index} className="flex flex-col items-center gap-1">
+                      <NavLink
+                        target="_blank"
+                        to={`tel:+${el}`}
+                        className="w-[40px] h-[40px] border-[1px] border-[#2222221A] flex justify-center items-center rounded-full"
+                      >
+                        <FaPhone className="w-[24px] h-[24px]" />
+                      </NavLink>
+                      <p className="text-[13px] leading-[16px] text-[#222222]  font-normal">
+                        Позвонить
+                      </p>
+                    </div>
+                  );
+                })}
               {fieldsIdDetail?.administrator?.instagram &&
+                Array.isArray(fieldsIdDetail?.administrator?.instagram) &&
                 fieldsIdDetail?.administrator?.instagram?.map((el, index) => {
                   return (
                     <div

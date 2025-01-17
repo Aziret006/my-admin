@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const DaySchedule = ({ day, dayState, setDayState }) => {
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -69,7 +68,7 @@ const ScheduleList = ({ setSchedule }) => {
   );
 
   const [dayState, setDayState] = useState({
-    понедельник: {
+    понедельник: {  
       day_of_week: 1,
       endTime: "",
       startTime: "",

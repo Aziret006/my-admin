@@ -34,13 +34,13 @@ export default function FiledList({
         </div>
         <div className="col-span-2 flex items-center gap-[2px]">
           <p className="text-base font-normal leading-4 tracking-tighter text-left whitespace-nowrap">
-            {item?.avg_rating?.toFixed(1)} ({item?.rating_num})
+            {item?.rates?.avg_rating?.toFixed(1)} ({item?.rating_num})
           </p>
           <div className="flex items-center">
             <Stack spacing={1}>
               <Rating
                 name="half-rating-read"
-                defaultValue={item?.avg_rating}
+                defaultValue={item?.rates?.avg_rating}
                 precision={0.5}
                 readOnly
               />

@@ -123,12 +123,13 @@ export default function BookId({
               )}
               <div className={"flex justify-start items-center gap-1"}>
                 <p className="text-[#222222] text-[14px] leading-[16px] font-[500]">
-                  {item?.avg_rating?.toFixed(1)} ({item?.rating_num})
+                  {item?.rates?.avg_rating?.toFixed(1)} (
+                  {item?.rates?.rating_num})
                 </p>
                 <Stack spacing={1}>
                   <Rating
                     name="half-rating-read"
-                    defaultValue={item?.avg_rating}
+                    defaultValue={item?.rates?.avg_rating}
                     precision={0.5}
                     readOnly
                   />

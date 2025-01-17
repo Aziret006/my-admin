@@ -1,10 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
 .Home {
   margin-top: 60px;
   padding: 30px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+
   .Titel {
     display: flex;
     gap: 10px;
@@ -24,6 +26,7 @@
       color: black;
       text-align: left;
     }
+
     select {
       border: none;
       outline: none;
@@ -44,13 +47,16 @@
       align-items: center;
     }
   }
+
   .Blocks1 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 30px;
+
     @media (max-width: 1024px) {
       gap: 10px;
     }
+
     .Block1 {
       box-shadow: 10px #0000001a;
       border-radius: 10px;
@@ -65,6 +71,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
+
         .Block1TextP {
           font-family: Inter;
           font-size: 14px;
@@ -74,10 +81,12 @@
           text-align: left;
           color: #000;
         }
+
         div {
           display: flex;
           flex-direction: column;
           gap: 10px;
+
           h3 {
             font-family: Inter;
             font-size: 24px;
@@ -86,6 +95,7 @@
             letter-spacing: 0.5px;
             text-align: left;
           }
+
           span {
             display: flex;
             font-family: Inter;
@@ -96,6 +106,7 @@
             text-align: left;
             align-items: center;
             color: #404040;
+
             p {
               font-family: Inter;
               font-size: 12px;
@@ -106,6 +117,7 @@
               opacity: 1;
             }
           }
+
           p {
             font-family: Inter;
             font-size: 13px;
@@ -120,13 +132,16 @@
       }
     }
   }
+
   .Blocks2 {
     display: grid;
-    grid-template-columns: 30% 70%;
+    grid-template-columns: 30% 68.3%;
     gap: 30px;
+
     @media (max-width: 1024px) {
       grid-template-columns: 1fr;
     }
+
     .Block2 {
       box-shadow: 0px 0px 10px 0px #0000001a;
       border-radius: 10px;
@@ -135,6 +150,7 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
+
       p {
         font-family: Inter;
         font-size: 14px;
@@ -144,15 +160,18 @@
         text-align: left;
         color: #101010;
       }
+
       .ChartBasic {
         display: flex;
         flex-direction: column;
         gap: 10px;
+
         span {
           display: flex;
           gap: 20px;
           justify-content: space-between;
           align-items: center;
+
           p:nth-child(1) {
             font-family: Inter;
             font-size: 24px;
@@ -163,6 +182,7 @@
 
             color: #101010;
           }
+
           p:nth-child(2) {
             display: flex;
             justify-content: flex-end;
@@ -174,6 +194,7 @@
             letter-spacing: 0.5px;
             text-align: left;
             color: #737b8b;
+
             span {
               font-family: Inter;
               font-size: 12px;
@@ -185,10 +206,12 @@
           }
         }
       }
+
       .Block2_Tab {
         display: flex;
         justify-content: space-between;
         gap: 10px;
+
         p {
           display: flex;
           gap: 10px;
@@ -210,18 +233,21 @@
           }
         }
       }
+
       background-color: #fff;
     }
+
     .Block2_3_1 {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 15px;
+
       @media screen and (max-width: 765px) {
         grid-template-columns: 1fr;
       }
     }
+
     .Block2_3 {
-      width: 100%;
       min-height: 352px;
       border-radius: 10px;
       gap: 20px;
@@ -240,6 +266,7 @@
         text-align: left;
         color: #101010;
       }
+
       .BLock2_3Blocks {
         display: flex;
         justify-content: space-between;
@@ -248,8 +275,10 @@
     }
   }
 }
+
 .BLock2_3Blocks {
   display: flex;
+
   .dropdown {
     width: 100%;
     padding: 8px;
@@ -257,17 +286,23 @@
     border-radius: 8px;
     background-color: #f8f8f8;
     color: #333;
-    appearance: none; /* Убираем стандартный стиль */
-    -webkit-appearance: none; /* Для Safari */
-    -moz-appearance: none; /* Для Firefox */
+    appearance: none;
+    /* Убираем стандартный стиль */
+    -webkit-appearance: none;
+    /* Для Safari */
+    -moz-appearance: none;
+    /* Для Firefox */
     font-size: 1rem;
-    padding-right: 30px; /* Отступ для иконки стрелки */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z' fill='%23333'/%3E%3C/svg%3E"); /* Иконка стрелки */
+    padding-right: 30px;
+    /* Отступ для иконки стрелки */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z' fill='%23333'/%3E%3C/svg%3E");
+    /* Иконка стрелки */
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 16px;
     margin-bottom: 32px;
   }
+
   .Block3_3Blok1 {
     border-radius: 8px;
     width: 100%;
@@ -364,6 +399,7 @@
     box-shadow: 8px 4px 8px 0px rgba(0, 0, 0, 0.1);
   }
 }
+
 .Block3_3Blok1 {
   display: flex;
   flex-direction: column;

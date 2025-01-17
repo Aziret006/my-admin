@@ -1,3 +1,7 @@
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { FaInstagram, FaPhone, FaTelegram, FaWhatsapp } from "react-icons/fa6";
+
 const ContactIcon = ({ url, Icon, label }) => (
   <div className="flex flex-col items-center gap-1">
     <NavLink
@@ -12,3 +16,5 @@ const ContactIcon = ({ url, Icon, label }) => (
     </p>
   </div>
 );
+
+export default ContactIcon;

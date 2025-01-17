@@ -1,0 +1,21 @@
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  filter: invert(0.8);
+}
+
+input[type="date"] {
+  position: relative;
+  padding-right: 30px;
+}
+
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+  color: #333;
+}
+
+input[type="date"]:invalid::-webkit-datetime-edit {
+  color: #B8C0CC;
+} 

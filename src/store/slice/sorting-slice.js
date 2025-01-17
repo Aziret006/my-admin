@@ -1,17 +1,15 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { Api } from '../../api';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { Api } from "../../api";
 
-export const walletPost = createAsyncThunk(
-  "sorting/walletPost",
-  async (data, { rejectWithValue }) => {
+export const getBookings = createAsyncThunk(
+  "sorting/getBookings",
+  async ({ startDate, endDate }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${Api}football_fields_api/booking/?start=2024-11-5&end=2024-11-7`,
-        data,
+      const response = await axios.get(
+        `${Api}football_fields_api/booking/?start=${startDate}&end=${endDate}`,
         {
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
@@ -24,12 +22,11 @@ export const walletPost = createAsyncThunk(
 );
 
 const sortingSlice = createSlice({
-  name: 'sorting',
+  name: "sorting",
   initialState: {
     loading: false,
     sortedData: [],
     error: null,
-    sortConfig: { key: null, direction: 'ascending' },
   },
   reducers: {
     setSortConfig: (state, action) => {
@@ -41,14 +38,14 @@ const sortingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(walletPost.pending, (state) => {
+      .addCase(getBookings.pending, (state) => {
         state.loading = true;
       })
-      .addCase(walletPost.fulfilled, (state, action) => {
+      .addCase(getBookings.fulfilled, (state, action) => {
         state.loading = false;
-        state.sortedData.push(action.payload);
+        state.sortedData = Array.isArray(action.payload) ? action.payload : [action.payload];
       })
-      .addCase(walletPost.rejected, (state, action) => {
+      .addCase(getBookings.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
@@ -57,4 +54,3 @@ const sortingSlice = createSlice({
 
 export const { setSortConfig, setSortedData } = sortingSlice.actions;
 export default sortingSlice.reducer;
-

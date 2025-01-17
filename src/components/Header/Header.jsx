@@ -88,17 +88,6 @@ export default function Header({
               </span>
               <FaPlus className="w-[20px] h-[20px]" />
             </button>
-            {darkMode ? (
-              <MdLightMode
-                onClick={() => setDarkMode(!darkMode)}
-                className="lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] cursor-pointer  dark:fill-[#b3b3b3]"
-              />
-            ) : (
-              <MdDarkMode
-                onClick={() => setDarkMode(!darkMode)}
-                className="lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] cursor-pointer dark:fill-[#b3b3b3]"
-              />
-            )}
             <BiMessageDetail
               onClick={() => setOpen(true)}
               className=" dark:fill-[#b3b3b3]  lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] cursor-pointer"
