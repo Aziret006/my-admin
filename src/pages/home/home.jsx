@@ -187,12 +187,7 @@ const Home = () => {
           <div className={s.Block1Text}>
             <p className={s.Block1TextP}>Количество заказов</p>
             <div>
-              <h3>
-                {/* {numbersData.growth_percentage
-                  // ? numbersData.growth_percentage + "%"
-                  : "0%"} */}
-                {numbersData?.data?.[0]?.bookings}
-              </h3>
+              <h3>{numbersData?.data?.[0]?.bookings}</h3>
               <span>
                 <span
                   style={{
@@ -223,7 +218,7 @@ const Home = () => {
           <div className={s.Block1Text}>
             <p className={s.Block1TextP}>Общая сумма дохода</p>
             <div>
-              <h3>${totalIncomeData?.data?.income}</h3>
+              <h3>${totalIncomeData?.data?.income}0</h3>
               <span>
                 <p
                   style={{
@@ -263,8 +258,9 @@ const Home = () => {
           <div className={s.ChartBasic}>
             <span>
               <p>{data.growth_percentage}</p>
-              <span>
+              <p>
                 <span
+                  className={s.spanclients}
                   style={{
                     color:
                       typeof data?.growth_percentage === "number" &&
@@ -275,8 +271,8 @@ const Home = () => {
                 >
                   {data?.growth_percentage ?? "0"}%
                 </span>
-                <p>по сравнению с прошлой неделей</p>
-              </span>
+                по сравнению с прошлой неделей
+              </p>
             </span>
             <div className={s.ChartAll}>
               <Chart
