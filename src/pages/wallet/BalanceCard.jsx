@@ -107,7 +107,7 @@ const BalanceCard = () => {
           transaction.amount < 0 ? "red-500" : "green-500"
         }`}
       >
-       +{transaction.amount || transaction.football_field_cost} сом
+        +{transaction.amount || transaction.football_field_cost} сом
       </td>
 
       <td className="px-6 py-4 whitespace-nowrap">
@@ -175,7 +175,7 @@ const BalanceCard = () => {
               />
 
               <h4 className={`text-${isDateSelected ? "black" : "[#B8C0CC]"}`}>
-                {testValue !== null ? testValue : "Все операции"}
+                {testValue !== null ? testValue : "Период с"}
               </h4>
             </div>
 
@@ -204,7 +204,7 @@ const BalanceCard = () => {
               />
 
               <h4 className={`text-${isDateSelected2 ? "black" : "[#B8C0CC]"}`}>
-                {testValue2 !== null ? testValue2 : "Все операции"}
+                {testValue2 !== null ? testValue2 : "Период до"}
               </h4>
             </div>
 

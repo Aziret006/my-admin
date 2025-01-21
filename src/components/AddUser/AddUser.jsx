@@ -67,11 +67,8 @@ export default function AddUser({ user, setUser }) {
             </div>
           </div>
         )}
-
         {loading && <p className="text-center text-gray-500">Загрузка...</p>}
-
         {error && <p className="text-center text-red-500">{error}</p>}
-
         {users?.results?.length > 0 && (
           <div className="flex flex-col gap-[12px] max-h-[300px] overflow-y-auto">
             {users.results.map((user) => (
@@ -98,7 +95,6 @@ export default function AddUser({ user, setUser }) {
             ))}
           </div>
         )}
-
         {users?.results?.length === 0 && search && !loading && (
           <p className="text-[15px] text-center text-[#1C1C1C] font-normal leading-[18px] opacity-70">
             Пользователь не найден

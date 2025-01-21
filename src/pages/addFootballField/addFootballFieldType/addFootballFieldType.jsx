@@ -171,7 +171,6 @@ const AddFootballFieldType = () => {
           price: Number(priceNight.price),
         },
       ],
-
       construction_type: constructionListAcc,
     };
 

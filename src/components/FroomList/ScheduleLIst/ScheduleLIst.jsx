@@ -68,7 +68,7 @@ const ScheduleList = ({ setSchedule }) => {
   );
 
   const [dayState, setDayState] = useState({
-    понедельник: {  
+    понедельник: {
       day_of_week: 1,
       endTime: "",
       startTime: "",

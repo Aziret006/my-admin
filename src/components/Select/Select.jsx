@@ -10,15 +10,15 @@ export default function Select({ setName, name }) {
   const handleSelect = (option) => {
     setName({
       name: option.name,
-      slug: option.slug
+      slug: option.slug,
     });
     setSelect(false);
   };
 
   const options = [
-    { name: 'Стандарт', slug: 'standart' },
-    { name: 'Футзал', slug: 'futzal' },
-    { name: 'Мини зал', slug: 'mini_zal' }
+    { name: "Стандарт", slug: "standart" },
+    { name: "Футзал", slug: "futzal" },
+    { name: "Мини зал", slug: "mini-zal" },
   ];
 
   return (
@@ -32,7 +32,7 @@ export default function Select({ setName, name }) {
           className="flex justify-between items-center py-[10px] px-[14px] bg-[#F0F0F0] rounded-[10px] cursor-pointer border-[2px] border-[#1C1C1C0D]"
         >
           <p className="text-[16px] text-[#1C1C1C] font-normal leading-normal">
-            {typeof name === 'string' ? name : name?.name || "Выберите тип"}
+            {typeof name === "string" ? name : name?.name || "Выберите тип"}
           </p>
           <IoIosArrowDown className="w-6 h-6" />
         </div>
@@ -48,13 +48,18 @@ export default function Select({ setName, name }) {
                   key={index}
                   onClick={() => handleSelect(item)}
                   className={`flex justify-between items-center px-[17px] py-[5px] rounded-[10px] cursor-pointer ${
-                    item.name === (typeof name === 'string' ? name : name?.name) ? "bg-[#F0F0F0]" : ""
+                    item.name === (typeof name === "string" ? name : name?.name)
+                      ? "bg-[#F0F0F0]"
+                      : ""
                   }`}
                 >
                   <p className="text-[15px] text-[#0E1422] font-normal leading-[26px]">
                     {item.name}
                   </p>
-                  {item.name === (typeof name === 'string' ? name : name?.name) && <FaCheck className="w-4 h-4" />}
+                  {item.name ===
+                    (typeof name === "string" ? name : name?.name) && (
+                    <FaCheck className="w-4 h-4" />
+                  )}
                 </div>
               ))}
             </div>
