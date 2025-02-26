@@ -54,7 +54,6 @@ const AddFootballFieldType = () => {
   const [selectedImages1, setSelectedImages1] = useState([]);
   const [selectedIamgeFile, setSelectedImageFile] = useState([]);
   const [constructionListAcc, setConstructionListAcc] = useState([]);
-  console.log(advantagesList, "aziret");
 
   const handlerConstruction = (selectedItem) => {
     if (!Array.isArray(constructionListAcc)) {
@@ -167,7 +166,7 @@ const AddFootballFieldType = () => {
         {
           start_time: priceNight.start_time,
           end_time: priceNight.end_time,
-          period_day: "evening",
+          period_day: "day",
           price: Number(priceNight.price),
         },
       ],
@@ -192,7 +191,7 @@ const AddFootballFieldType = () => {
     setMapLatLon([]);
     setDescription("");
     setAdministratorValue("");
-    setAdministrator("");
+    setAdministrator("");  
     setPriceDay({ start_time: "", end_time: "", period_day: "day", price: 0 });
     setPriceNight({
       start_time: "",

@@ -21,15 +21,10 @@ const formatDate = (dateString) => {
     "Мая",
     "Июня",
     "Июля",
-
     "Августа",
-
     "Сентября",
-
     "Октября",
-
     "Ноября",
-
     "Декабря",
   ];
 
@@ -101,7 +96,6 @@ const BalanceCard = () => {
           </span>
         </div>
       </td>
-
       <td
         className={`px-6 py-4 whitespace-nowrap text-${
           transaction.amount < 0 ? "red-500" : "green-500"
@@ -109,19 +103,15 @@ const BalanceCard = () => {
       >
         +{transaction.amount || transaction.football_field_cost} сом
       </td>
-
       <td className="px-6 py-4 whitespace-nowrap">
         {transaction.user || transaction.created_by || "-"}
       </td>
-
       <td className="px-6 py-4 whitespace-nowrap">
         {transaction.field || transaction.field_type || "-"}
       </td>
-
       <td className="px-6 py-4 whitespace-nowrap">
         <span className="flex items-center gap-x-[5px] px-2 py-1 rounded">
           <IoCalendarClearOutline />
-
           {transaction.paymentSystem || transaction.payment_type || "-"}
         </span>
       </td>
@@ -275,10 +265,17 @@ const BalanceCard = () => {
               </th>
             </tr>
           </thead>
-
           <tbody className="bg-white divide-y divide-gray-200">
-            {transactions.map((transaction, index) =>
-              renderTransaction(transaction, index)
+            {transactions.length > 0 ? (
+              transactions.map((transaction, index) =>
+                renderTransaction(transaction, index)
+              )
+            ) : (
+              <tr>
+                <td colSpan="100%" className="text-center py-4 text-[#000]">
+                  Данных нет
+                </td>
+              </tr>
             )}
           </tbody>
         </table>

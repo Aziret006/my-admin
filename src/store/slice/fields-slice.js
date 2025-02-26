@@ -4,7 +4,6 @@ import axios from "axios";
 import { fetchBookings } from "./story";
 import { toast, ToastContainer } from "react-toastify";
 
-
 export const fetchFields = createAsyncThunk(
   "fields/fetchFields",
   async (_, { rejectWithValue, dispatch }) => {
@@ -21,11 +20,8 @@ export const fetchFields = createAsyncThunk(
         },
       });
 
-      // Проверяем данные ответа
       if (response.data && response.data.length > 0) {
         const firstFieldId = response.data[0].id;
-
-        // Диспатчим экшены
         dispatch(setFieldsId(firstFieldId));
         dispatch(fetchFieldsIdList(firstFieldId));
       } else {
@@ -51,7 +47,6 @@ export const fetchFields = createAsyncThunk(
     }
   }
 );
-
 
 export const fetchFieldsDelete = createAsyncThunk(
   "fields/fetchFieldsDelete",
@@ -107,7 +102,6 @@ export const fetchFieldsIdList = createAsyncThunk(
           },
         }
       );
-      
       if (response.data?.football_field_type?.length > 0) {
         dispatch(setFootballId(response?.data?.football_field_type[0]?.id));
         dispatch(
@@ -157,7 +151,6 @@ export const fetchFieldsIdDetail = createAsyncThunk(
   }
 );
 
-
 export const fieldsSlice = createSlice({
   name: "fields",
   initialState: {
@@ -171,7 +164,6 @@ export const fieldsSlice = createSlice({
     fieldsIdDetail: null,
     fieldsComments: null,
   },
-  
 
   reducers: {
     setFieldsId: (state, action) => {

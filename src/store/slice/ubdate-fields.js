@@ -5,24 +5,26 @@ import { Api } from "../../api";
 export const fetchUbdateFields = createAsyncThunk(
   "ubdateFields/fetchUbdateFields",
   async (data, { rejectWithValue }) => {
+    console.log(data?.two, "data?.two");
+
     try {
-      const response = await axios.put(
-        `${Api}admin_api/football-field-type/${data.id}/`,
+      const response = await axios.patch(
+        `${Api}admin_api/football-field-type/${data.typeId}/`,
         data?.two,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
+      console.log(data.typeId,'aziret');
+      
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
-
 
 const ubdateFields = createSlice({
   name: "ubdateFields",
@@ -31,9 +33,7 @@ const ubdateFields = createSlice({
     error: null,
     loading: false,
   },
-  reducers: {
-
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchUbdateFields.pending, (state) => {
@@ -49,6 +49,5 @@ const ubdateFields = createSlice({
       });
   },
 });
-
 
 export default ubdateFields.reducer;

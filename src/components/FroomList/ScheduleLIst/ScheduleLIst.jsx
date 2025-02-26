@@ -69,18 +69,18 @@ const ScheduleList = ({ setSchedule }) => {
 
   const [dayState, setDayState] = useState({
     понедельник: {
-      day_of_week: 1,
+      day_of_week: 0,
       endTime: "",
       startTime: "",
       checkbox: false,
     },
-    вторник: { day_of_week: 2, endTime: "", startTime: "", checkbox: false },
-    среда: { day_of_week: 3, endTime: "", startTime: "", checkbox: false },
-    четверг: { day_of_week: 4, endTime: "", startTime: "", checkbox: false },
-    пятница: { day_of_week: 5, endTime: "", startTime: "", checkbox: false },
-    суббота: { day_of_week: 6, endTime: "", startTime: "", checkbox: false },
+    вторник: { day_of_week: 1, endTime: "", startTime: "", checkbox: false },
+    среда: { day_of_week: 2, endTime: "", startTime: "", checkbox: false },
+    четверг: { day_of_week: 3, endTime: "", startTime: "", checkbox: false },
+    пятница: { day_of_week: 4, endTime: "", startTime: "", checkbox: false },
+    суббота: { day_of_week: 5, endTime: "", startTime: "", checkbox: false },
     воскресенье: {
-      day_of_week: 7,
+      day_of_week: 6,
       endTime: "",
       startTime: "",
       checkbox: false,

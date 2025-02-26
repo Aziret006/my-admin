@@ -14,7 +14,10 @@ export const fetchUser = createAsyncThunk(
   "user/fetchUser",
   async (credentials, { rejectWithValue, dispatch }) => {
     try {
-      const response = await axios.post(`${Api}user_api/login/`, credentials);
+      const response = await axios.post(
+        `${Api}user_api/login_admin/`,
+        credentials
+      );
       await localStorage.setItem("token", response?.data.access_token);
       await dispatch(getUser());
       const headers = response.headers;
