@@ -15,7 +15,8 @@ export const fetchRating = createAsyncThunk(
           days,
         },
       });
-      return response.data;
+      console.log(response.data, "response.data");
+      return response.data;      
     } catch (error) {
       console.error("Error fetching analytics rating:", error);
       return rejectWithValue(error.response?.data || "Something went wrong");

@@ -13,7 +13,7 @@ import Loader from "../../components/Loader/Loader";
 export default function Fields() {
   const dispatch = useDispatch();
   const { fields, loading } = useSelector((state) => state.fields);
-
+   
   const [pages, setPages] = useState("about");
   const [fieldDelete, setFieldDelete] = useState(false);
   const [deleteValue, setDeleteValue] = useState(null);

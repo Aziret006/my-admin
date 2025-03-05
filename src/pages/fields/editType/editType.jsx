@@ -496,7 +496,7 @@ const EditType = () => {
                 Сохранить и создать поле
               </button>
               <NavLink
-                to={`#`}
+                to={`/fields/${id}`}
                 onClick={() => {
                   if (newName && description) {
                     handleGetInfo();

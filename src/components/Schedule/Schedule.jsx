@@ -5,31 +5,31 @@ export default function Schedule() {
   const { fieldsIdList, fieldsIdDetail } = useSelector((state) => state.fields);
   const week = [
     {
-      id: 1,
+      id: 0,
       title: "Понедельник",
     },
     {
-      id: 2,
+      id: 1,
       title: "Вторник",
     },
     {
-      id: 3,
+      id: 2,
       title: "Среда",
     },
     {
-      id: 4,
+      id: 3,
       title: "Четверг",
     },
     {
-      id: 5,
+      id: 4,
       title: "Пятница",
     },
     {
-      id: 6,
+      id: 5,
       title: "Суббота",
     },
     {
-      id: 7,
+      id: 6,
       title: "Воскресенье",
     },
   ];
@@ -54,7 +54,6 @@ export default function Schedule() {
                   const weekDay = week?.find(
                     (el) => el.id === item?.day_of_week
                   );
-
                   return (
                     <div
                       key={index}

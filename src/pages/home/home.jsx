@@ -9,19 +9,12 @@ import { fetchTotalIncome } from "../../store/slice/total-income";
 import { fetchFields } from "../../store/slice/fields-slice";
 import { fetchNumberOfNewClients } from "../../store/slice/number-of-new-clients";
 import RatingComponent from "../../components/RatingComponent/RatingComponent";
+import Reviews from "../../components/Reviews/Reviews";
 
 const Home = () => {
   const { data, loading, error } = useSelector(
     (state) => state.analitOrdersFields
   );
-
-  const { fields } = useSelector((state) => state.fields);
-  useEffect(() => {
-    dispatch(fetchFields());
-  }, []);
-
-  const [fieldDelete, setFieldDelete] = useState(false);
-  const [deleteValue, setDeleteValue] = useState(null);
 
   const dispatch = useDispatch();
   const [chartData, setChartData] = useState([]);
@@ -52,15 +45,15 @@ const Home = () => {
 
   useEffect(() => {
     if (!data) return;
-    const chartData = data?.data?.map((item) => ({
+    const chartData = data?.current_week_data?.map((item) => ({
       x: new Date(item.day),
       y: item.new_clients,
     }));
-    const chartData2 = totalIncomeData?.data?.map((item) => ({
+    const chartData2 = totalIncomeData?.current_week_data?.map((item) => ({
       x: new Date(item.day),
       y: item.income,
     }));
-    const chartData3 = numbersData?.data?.map((item) => ({
+    const chartData3 = numbersData?.current_week_data?.map((item) => ({
       x: new Date(item.day),
       y: item.bookings,
     }));
@@ -68,6 +61,7 @@ const Home = () => {
     setChartData2(chartData2);
     setChartData3(chartData3);
   }, [data]);
+  console.log(totalIncomeData, "data");
 
   const [active, setActive] = useState(1);
 
@@ -166,8 +160,8 @@ const Home = () => {
 
   const series4 = [
     {
-      name: "New Clients",
-      data: chartData,
+      name: "Bookings",
+      data: chartData3,
     },
   ];
 
@@ -187,18 +181,18 @@ const Home = () => {
           <div className={s.Block1Text}>
             <p className={s.Block1TextP}>Количество заказов</p>
             <div>
-              <h3>{numbersData?.data?.[0]?.bookings}</h3>
+              <h3>{data?.current_week_data?.[0]?.new_clients ?? "0"}</h3>
               <span>
                 <span
                   style={{
                     color:
-                      typeof numbersData?.growth_percentage === "number" &&
-                      numbersData.growth_percentage < 0
+                      typeof data?.growth_percentage === "number" &&
+                      data.growth_percentage < 0
                         ? "#FF0000"
                         : "#4C8E4C",
                   }}
                 >
-                  {numbersData?.growth_percentage ?? "0"}%
+                  {data?.growth_percentage ?? "0"}%
                 </span>
                 по сравнению с прошлой неделей
               </span>
@@ -218,7 +212,7 @@ const Home = () => {
           <div className={s.Block1Text}>
             <p className={s.Block1TextP}>Общая сумма дохода</p>
             <div>
-              <h3>${totalIncomeData?.data?.income}0</h3>
+              <h3> {totalIncomeData?.current_week_data?.[0]?.income} сом</h3>
               <span>
                 <p
                   style={{
@@ -228,20 +222,20 @@ const Home = () => {
                   <span
                     style={{
                       color:
-                        typeof numbersData?.growth_percentage === "number" &&
-                        numbersData.growth_percentage < 0
+                        typeof totalIncomeData?.growth_percentage ===
+                          "number" && totalIncomeData.growth_percentage < 0
                           ? "#FF0000"
                           : "#4C8E4C",
                     }}
                   >
-                    {numbersData?.growth_percentage ?? "0"}%
+                    {totalIncomeData?.growth_percentage ?? "0"}%
                   </span>
                 </p>
                 по сравнению с прошлой неделей
               </span>
               <p>Расчёт с 1 по 6 Декабря 2024</p>
             </div>
-          </div>
+          </div> 
           <div className={s.Block1Chart}>
             <Chart
               options={chartOptions}
@@ -257,7 +251,7 @@ const Home = () => {
           <p>Кол-во новых клиентов</p>
           <div className={s.ChartBasic}>
             <span>
-              <p>{data.growth_percentage}</p>
+              <h3>{numbersData?.current_week_data?.[0]?.bookings ?? "0"}</h3>
               <p>
                 <span
                   className={s.spanclients}
@@ -277,7 +271,7 @@ const Home = () => {
             <div className={s.ChartAll}>
               <Chart
                 options={options}
-                series={series}
+                series={series4}
                 type="bar"
                 height={200}
               />
@@ -304,40 +298,7 @@ const Home = () => {
         </div>
         <div className={s.Block2_3}>
           <h2>Отзывы и рейтинг</h2>
-          <div className={s.Block2_3_1}>
-            <div className={s.BLock2_3Blocks}>
-              <div className={s.Block3_3Blok1}>
-                <select className={s.dropdown} name="" id="">
-                  <option value="week">За неделю</option>
-                  <option value="month">За месяц</option>
-                  <option value="year">За год</option>
-                  <option value="all">За все время</option>
-                </select>
-                <RatingComponent fieldId={1} days={7} />
-                <div className={s.stats}>
-                  <span
-                    className={s.percentageChange}
-                    style={{ color: "#4C8E4C" }}
-                  >
-                    +2.1% по сравнению с прошлой неделей
-                  </span>
-                  <p className={s.dateRange}>Расчёт с 1 по 6 Декабря 2024</p>
-                </div>
-              </div>
-            </div>
-            {fields?.results?.map(
-              (item, index) =>
-                index === 0 && (
-                  <BookId
-                    fieldDelete={fieldDelete}
-                    setFieldDelete={setFieldDelete}
-                    setDeleteValue={setDeleteValue}
-                    key={item.id}
-                    item={item}
-                  />
-                )
-            )}
-          </div>
+          <Reviews />
         </div>
       </div>
     </div>
