@@ -10,7 +10,7 @@ import { ChevronUp } from "lucide-react"
 
 const Reviews = () => {
   const { fields } = useSelector((state) => state.fields)
-  const [fieldDelete, setFieldDelete] = useState(false)
+  const [fieldDelete, setFieldDelete] = useState(true)
   const [deleteValue, setDeleteValue] = useState(null)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [selectedField, setSelectedField] = useState(null)
@@ -34,7 +34,7 @@ const Reviews = () => {
   const handleFieldSelect = (field) => {
     setSelectedField(field)
     setIsDropdownOpen(false)
-  }
+  }  
 
   return (
     <>
@@ -58,14 +58,14 @@ const Reviews = () => {
             </div>
             <RatingComponent fieldId={selectedField?.id} days={7} />
             <div className={s.stats}>
-              <span className={s.percentageChange} style={{ color: "#4C8E4C" }}>
-                +2.1% по сравнению с прошлой неделей
-              </span>
+              <p className={s.percentageChange} style={{ color: "#4C8E4C" }}>
+                +2.1% <span>по сравнению с прошлой неделей</span>
+              </p>
               <p className={s.dateRange}>Расчёт с 1 по 6 Декабря 2024</p>
             </div>
           </div>
         </div>
-        {selectedField && (
+        {selectedField ? (
           <BookId
             fieldDelete={fieldDelete}
             setFieldDelete={setFieldDelete}
@@ -73,6 +73,8 @@ const Reviews = () => {
             key={selectedField.id}
             item={selectedField}
           />
+        ) : (
+          <p className={s.noFields}>Нет полей</p>
         )}
       </div>
     </>

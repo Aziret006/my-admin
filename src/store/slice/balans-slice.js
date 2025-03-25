@@ -42,7 +42,7 @@ const walletBalanceSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchWalletBalance.fulfilled, (state, action) => {
-        state.data = action.payload || null; // Fallback if payload is empty
+        state.data = action.payload || null;
         state.loading = false;
       })
       .addCase(fetchWalletBalance.rejected, (state, action) => {

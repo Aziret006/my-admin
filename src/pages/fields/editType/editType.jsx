@@ -105,13 +105,22 @@ const EditType = () => {
 
     formData.append("football_f", footballId);
     const price = [priceDay, priceNight];
+
     dataPUT["advantages"] = advantagesList;
     dataPUT["schedule"] = schedule;
     dataPUT["price"] = price;
     dataPUT["construction_type"] = constructionListAcc;
-    dataPUT["name"] = newName?.slug;
+
+    if (!newName || !newName.name) {
+      console.error("Name is required");
+      return;
+    }
+
+    dataPUT["name"] = newName.name;
+
     formData.append("description", description);
-    formData.append("name", newName?.slug);
+    formData.append("name", newName.name);
+
     selectedIamgeFile?.forEach((file) => {
       formData.append("images", file);
     });
@@ -122,7 +131,6 @@ const EditType = () => {
       two: dataPUT,
       typeId: footballTypeId,
     };
-    console.log(footballTypeId, "footballTypeId1");
 
     dispatch(fetchUbdateFields(newData));
   };

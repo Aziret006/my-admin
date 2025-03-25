@@ -196,7 +196,7 @@ const Home = () => {
                 </span>
                 по сравнению с прошлой неделей
               </span>
-              <p>Расчёт с 1 по 6 Декабря 2024</p>
+              <p>Расчёт с {data?.current_week_start} по {data?.current_week_end}</p>
             </div>
           </div>
           <div className={s.Block1Chart}>
@@ -233,7 +233,16 @@ const Home = () => {
                 </p>
                 по сравнению с прошлой неделей
               </span>
-              <p>Расчёт с 1 по 6 Декабря 2024</p>
+              <p>
+                Расчёт с{" "}
+                {new Date(totalIncomeData?.current_week_start).toLocaleDateString(
+                  "ru-RU"
+                )}{" "}
+                по{" "}
+                {new Date(totalIncomeData?.current_week_end).toLocaleDateString(
+                  "ru-RU"
+                )}
+              </p>
             </div>
           </div> 
           <div className={s.Block1Chart}>
@@ -263,7 +272,7 @@ const Home = () => {
                         : "#4C8E4C",
                   }}
                 >
-                  {data?.growth_percentage ?? "0"}%
+                  {typeof data?.growth_percentage === "number" ? data?.growth_percentage.toFixed(1) + "%" : "0%"}
                 </span>
                 по сравнению с прошлой неделей
               </p>
@@ -273,11 +282,11 @@ const Home = () => {
                 options={options}
                 series={series4}
                 type="bar"
-                height={200}
+                height={250}
               />
             </div>
           </div>
-          <span className={s.Block2_Tab}>
+          {/* <span className={s.Block2_Tab}>
             <p onClick={() => setActive(1)}>
               <div
                 style={{
@@ -294,7 +303,7 @@ const Home = () => {
               ></div>
               прошлую неделю
             </p>
-          </span>
+          </span> */}
         </div>
         <div className={s.Block2_3}>
           <h2>Отзывы и рейтинг</h2>
