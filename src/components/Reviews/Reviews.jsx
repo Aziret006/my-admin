@@ -74,7 +74,7 @@ const Reviews = () => {
             item={selectedField}
           />
         ) : (
-          <h5 className={s.noFields}>Нет полей</h5>
+          <h3 className={'flex items-center justify-center'}>Нет полей</h3>
         )}
       </div>
     </>
