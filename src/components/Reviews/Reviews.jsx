@@ -74,7 +74,7 @@ const Reviews = () => {
             item={selectedField}
           />
         ) : (
-          <p className={s.noFields}>Нет полей</p>
+          <h5 className={s.noFields}>Нет полей</h5>
         )}
       </div>
     </>
