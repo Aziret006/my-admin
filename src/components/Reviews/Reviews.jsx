@@ -1,5 +1,4 @@
 "use client"
-
 import { useEffect, useState } from "react"
 import s from "./Reviews.module.scss"
 import RatingComponent from "../RatingComponent/RatingComponent"
@@ -34,7 +33,7 @@ const Reviews = () => {
   const handleFieldSelect = (field) => {
     setSelectedField(field)
     setIsDropdownOpen(false)
-  }  
+  }
 
   return (
     <>
@@ -57,12 +56,12 @@ const Reviews = () => {
               )}
             </div>
             <RatingComponent fieldId={selectedField?.id} days={7} />
-            <div className={s.stats}>
+            {/* <div className={s.stats}>
               <p className={s.percentageChange} style={{ color: "#4C8E4C" }}>
                 +2.1% <span>по сравнению с прошлой неделей</span>
               </p>
               <p className={s.dateRange}>Расчёт с 1 по 6 Декабря 2024</p>
-            </div>
+            </div> */}
           </div>
         </div>
         {selectedField ? (
