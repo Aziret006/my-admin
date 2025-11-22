@@ -170,7 +170,7 @@ const EditType = () => {
   };
 
   useEffect(() => {
-    setNewName(fieldsIdDetail?.slug);
+    setNewName(fieldsIdDetail?.name);
     setDescription(fieldsIdDetail?.description);
     setAdministrator(fieldsIdDetail?.administrator);
     setPriceDay({

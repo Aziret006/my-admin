@@ -17,7 +17,6 @@ export const fetchUbdateFields = createAsyncThunk(
           },
         }
       );
-      console.log(data.typeId,'aziret');
       
       return response.data;
     } catch (error) {

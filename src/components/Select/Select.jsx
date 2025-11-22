@@ -32,7 +32,7 @@ export default function Select({ setName, name }) {
           className="flex justify-between items-center py-[10px] px-[14px] bg-[#F0F0F0] rounded-[10px] cursor-pointer border-[2px] border-[#1C1C1C0D]"
         >
           <p className="text-[16px] text-[#1C1C1C] font-normal leading-normal">
-            {typeof slug === "string" ? name : name?.slug || "Выберите тип"}
+            {typeof name === "string" ? name : name?.name || "Выберите тип"}
           </p>
           <IoIosArrowDown className="w-6 h-6" />
         </div>
@@ -48,13 +48,13 @@ export default function Select({ setName, name }) {
                   key={index}
                   onClick={() => handleSelect(item)}
                   className={`flex justify-between items-center px-[17px] py-[5px] rounded-[10px] cursor-pointer ${
-                    item.name === (typeof slug === "string" ? name : name?.slug)
+                    item.name === (typeof name === "string" ? name : name?.name)
                       ? "bg-[#F0F0F0]"
                       : ""
                   }`}
                 >
                   <p className="text-[15px] text-[#0E1422] font-normal leading-[26px]">
-                    {item.slug}
+                    {item.name}
                   </p>
                   {item.name ===
                     (typeof name === "string" ? name : name?.name) && (
