@@ -84,7 +84,7 @@ export default function AddFootballField() {
     const data = {
       name: newName,
       description: description,
-      administrator: administratorValue?.id,
+      administrator: 4,
       address: address,
       city: locationsCitiesValue,
       district: district,
