@@ -14,7 +14,7 @@ export default function Draggable() {
 
   useEffect(() => {
     if (fieldsIdList?.football_field_type?.length > 0) {
-      dispatch(fetchBookings(`${fieldsIdList?.football_field_type[0]?.id}?limit=1000`));
+      dispatch(fetchBookings(`${fieldsIdList?.football_field_type[0]?.id}`));
     } else {
       dispatch(setBookings(null));
     }
@@ -52,7 +52,7 @@ export default function Draggable() {
                           onClick={() => {
                             setSelectOptions(!selectOptions);
                             dispatch(setSelectValue(item?.name));
-                            dispatch(fetchBookings(`${item?.id}?limit=1000`));
+                            dispatch(fetchBookings(`${item?.id}`));
                           }}
                           className="text-[16px] text-[#fff] py-[6px] px-[12px] lg:px-[16px] hover:bg-[#4d4c4c] duration-300 cursor-pointer "
                         >
