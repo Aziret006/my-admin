@@ -1,1 +1,2 @@
-export const Api = "https://odigital.pro/";
+export const Api = "https://api.odigital.pro/";
+
